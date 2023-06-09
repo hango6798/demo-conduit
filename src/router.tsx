@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom"
+import { Layout } from "./components/Layout/Layout"
 
 export const router = createBrowserRouter([
-    // {
-    //   path: '',
-    //   element: <Layout />,
+    {
+      path: '',
+      element: <Layout />,
     //   children: [
     //     {
     //       index: true,
@@ -46,5 +47,5 @@ export const router = createBrowserRouter([
     //       element: <RequiredAuth><Profile /></RequiredAuth>
     //     }
     //   ]
-    // },
+    },
 ])

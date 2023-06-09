@@ -1,0 +1,19 @@
+
+a{
+    text-decoration: none;
+}
+.navbar-brand{
+    font-weight: 600;
+    font-size: 24px;
+}
+.navbar-nav{
+    margin: 0 -10px;
+    a{
+        color: rgba(255, 255, 255, 0.8);
+        display: block;
+        margin: 0 10px;
+        &:hover{
+            color: rgba(255, 255, 255, 1);
+        }
+    }
+}
