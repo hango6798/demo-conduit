@@ -1,0 +1,27 @@
+
+
+.authorName{
+    &:hover{
+        opacity: 0.8;
+    }
+}
+.title{
+    height: 48px;
+    &:hover{
+        opacity: 0.8;
+    }
+}
+.readmore{
+    width: 80px;
+    &:hover{
+        color: #333!important;
+    }
+}
+.desc{
+    height: 63px;
+}
+.tag-list{
+    .list-group-item{
+        margin-top: 0.25rem;
+    }
+}

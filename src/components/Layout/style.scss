@@ -2,18 +2,75 @@
 a{
     text-decoration: none;
 }
-.navbar-brand{
-    font-weight: 600;
-    font-size: 24px;
+.navbar{
+    height: 64px;
+    padding: 0;
+    .navbar-brand{
+        font-weight: 600;
+        font-size: 24px;
+    }
+    .navbar-nav{
+        margin: 0 -10px;
+        a{
+            color: rgba(13, 110, 253, 0.8);
+            display: block;
+            margin: 0 10px;
+            &:hover{
+                color: rgba(13, 110, 253, 1);
+            }
+        }
+    }
+    .dropdown{
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            color: #333;
+            padding: 12px 10px 12px 0;
+            span{
+                display: block;
+                img{
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 5px;
+                    margin-right: 10px;
+                    border: 2px solid rgb(198 208 196 / 80%);
+                }
+                margin-right: 5px;
+            }
+        }
+        .dropdown-menu{
+            left: auto;
+            right: 0;
+            padding: 0.5rem;
+            margin: -5px 0 0;
+            background: #FFF;
+            border: 1px solid rgb(198 208 196 / 30%);
+            box-shadow: 0px 2px 5px rgba($color: #000000, $alpha: 0.1);
+            .dropdown-item{
+                color: #747474;
+                border-radius: 5px;
+                i{
+                    margin-right: 5px;
+                }
+                &:hover{
+                    color: #0d6efd;
+                }
+                &:focus,
+                &:active,
+                &.active {
+                    background-color: #e7e7e7;
+                }
+            }
+            .dropdown-divider{
+                border-top: 1px solid rgb(198 208 196 / 30%);
+            }
+        }
+    }
 }
-.navbar-nav{
-    margin: 0 -10px;
-    a{
-        color: rgba(255, 255, 255, 0.8);
-        display: block;
-        margin: 0 10px;
-        &:hover{
-            color: rgba(255, 255, 255, 1);
+@media screen and (max-width: 991px) {
+    .navbar {
+        .navbar-collapse{
+            width: auto;
         }
     }
 }

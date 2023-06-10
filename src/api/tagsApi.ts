@@ -1,8 +1,7 @@
-import { Tags } from "../models"
 import axiosClient from "./axiosClient"
 
 const tagApi = {
-    getAll():Promise<Tags> {
+    getAll():Promise<any> {
         const url = 'tags'
         return axiosClient.get(url)
     }

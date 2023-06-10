@@ -1,0 +1,21 @@
+
+.tabs{
+    overflow: hidden;
+    width: 100%;
+    .nav-link{
+        border: 1px solid #0d6efd;
+        margin-bottom: 10px;
+    }
+    select{
+        height: 42px;
+        margin-bottom: 10px;
+    }
+    @media screen and (max-width: 425px){
+        .nav-item{
+            margin-right: 0.25rem!important;
+        }
+        .nav-link{
+            padding: 0.5rem!important;
+        }
+    }
+}
