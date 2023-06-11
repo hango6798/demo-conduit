@@ -8,7 +8,7 @@ interface Props {
 
 export const Pagination = ({currentPage, setCurrentPage, pagesCount} : Props) => {
     
-    return <PagiBootstrap className="d-flex justify-content-center mt-3">
+    return pagesCount > 1 ? <PagiBootstrap className="d-flex justify-content-center mt-3">
         <PagiBootstrap.First disabled={currentPage === 1} onClick={() => setCurrentPage(1)}/>
         <PagiBootstrap.Prev disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}/>
         {
@@ -47,4 +47,5 @@ export const Pagination = ({currentPage, setCurrentPage, pagesCount} : Props) =>
         <PagiBootstrap.Next onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === pagesCount}/>
         <PagiBootstrap.Last onClick={() => setCurrentPage(pagesCount)} disabled={currentPage === pagesCount}/>
     </PagiBootstrap>
+    : null
 }

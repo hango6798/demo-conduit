@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom"
-import { Layout } from "./components/Layout/Layout"
+import { Layout } from "./components/Layout"
 import { Articles } from "./pages/Articles"
 import { RequiredAuth } from "./components/RequiredAuth"
 import { ArticleDetail } from "./pages/ArticleDetail"

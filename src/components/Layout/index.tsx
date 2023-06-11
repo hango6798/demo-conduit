@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom"
 import Header from "./Header"
-import { Container } from "react-bootstrap"
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { fetchUser } from "../../store/userSlice"
@@ -15,20 +14,7 @@ export const Layout = () => {
 
     return <div>
         <Header/>
-        
-        {
-            !token &&
-            <div className="bg-primary text-white">
-                <Container fluid className="text-center py-5">
-                    <div className="h1 ">conduit</div>
-                    <div className="h5 fw-light">A place to share your knowledge.</div>
-                </Container>
-            </div>
-        }
-
-        <Container fluid className="px-md-4 px-xs-3">
-            <Outlet />
-        </Container>
+        <Outlet />
         <div className="footer">
 
         </div>

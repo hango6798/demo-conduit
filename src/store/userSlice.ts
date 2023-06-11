@@ -125,11 +125,13 @@ export const userSlice = createSlice({
         builder.addCase(login.rejected, (state:UserState, action: PayloadAction<any>) => {
             state.status.login = "failed"
             const listError = []
-            for(let key of Object.keys(action.payload)){
-                const message = key[0].toUpperCase() + key.slice(1) + ' ' + action.payload[key]
-                listError.push(message)
+            if(action.payload) {
+                for(let key of Object.keys(action.payload)){
+                    const message = key[0].toUpperCase() + key.slice(1) + ' ' + action.payload[key]
+                    listError.push(message)
+                }
+                state.error.login = listError[listError.length - 1]
             }
-            state.error.login = listError[listError.length - 1]
         })
         builder.addCase(register.pending, (state) => {
             state.status.register = "loading"

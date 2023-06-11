@@ -4,6 +4,7 @@ import { persistStore, persistReducer } from 'redux-persist'
 import userReducer from './userSlice'
 import articlesReducer from './ArticlesSlice'
 import tagsReducer from './tagsSlice'
+import profilesReducer from './profilesSlice'
 
 const persistConfig = {
   key: 'root',
@@ -12,9 +13,10 @@ const persistConfig = {
 }
 
 const persistedReducer = persistReducer(persistConfig, combineReducers({
-    userReducer: userReducer,
-    articlesReducer: articlesReducer,
-    tagsReducer: tagsReducer,
+    userReducer,
+    articlesReducer,
+    tagsReducer,
+    profilesReducer,
 }))
 
 

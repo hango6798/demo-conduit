@@ -4,22 +4,16 @@ import { Article } from '../models';
 import articlesApi from '../api/articlesApi';
 
 export interface ArticleState {
-    globalArticles: Article[];
-    feedArticles: Article[];
-    globalStatus: 'idle' | 'loading' | 'failed';
-    feedStatus: 'idle' | 'loading' | 'failed';
-    globalArticlesCount: number;
-    feedArticlesCount: number;
+    articles: Article[];
+    status: 'idle' | 'loading' | 'failed';
+    articlesCount: number;
     currentFavSlug: string | null;
 }
 
 const initialState:ArticleState = {
-    globalArticles: [],
-    feedArticles: [],
-    globalStatus: 'idle',
-    feedStatus: 'idle',
-    globalArticlesCount: 0,
-    feedArticlesCount: 0,
+    articles: [],
+    status: 'idle',
+    articlesCount: 0,
     currentFavSlug: null,
 };
 
@@ -86,40 +80,34 @@ export const articlesSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchGlobalArticles.pending, (state:ArticleState) => {
-            state.globalStatus = "loading"
+            state.status = "loading"
         })
         builder.addCase(fetchGlobalArticles.fulfilled, (state:ArticleState, action: PayloadAction<any>) => {
-            state.globalStatus = "idle"
-            state.globalArticles = action.payload.articles
-            state.globalArticlesCount = action.payload.articlesCount
+            state.status = "idle"
+            state.articles = action.payload.articles
+            state.articlesCount = action.payload.articlesCount
         })
         builder.addCase(fetchGlobalArticles.rejected, (state:ArticleState, action: PayloadAction<any>) => {
-            state.globalStatus = "failed"
+            state.status = "failed"
         })
         builder.addCase(fetchFeedArticles.pending, (state:ArticleState) => {
-            state.feedStatus = "loading"
+            state.status = "loading"
         })
         builder.addCase(fetchFeedArticles.fulfilled, (state:ArticleState, action: PayloadAction<any>) => {
-            state.feedStatus = "idle"
-            state.feedArticles = action.payload.articles
-            state.feedArticlesCount = action.payload.articlesCount
+            state.status = "idle"
+            state.articles = action.payload.articles
+            state.articlesCount = action.payload.articlesCount
         })
         builder.addCase(fetchFeedArticles.rejected, (state:ArticleState, action: PayloadAction<any>) => {
-            state.feedStatus = "failed"
+            state.status = "failed"
         })
         builder.addCase(favorite.fulfilled, (state:ArticleState, action: PayloadAction<any>) => {
-            const globalId:number = state.globalArticles.findIndex((a:Article) => a.slug === action.payload.slug)
-            const feedId:number = state.feedArticles.findIndex((a:Article) => a.slug === action.payload.slug)
-
-            globalId !== -1 && (state.globalArticles[globalId] = action.payload)
-            feedId !== -1 && (state.feedArticles[feedId] = action.payload)
+            const id:number = state.articles.findIndex((a:Article) => a.slug === action.payload.slug)
+            id !== -1 && (state.articles[id] = action.payload)
         })
         builder.addCase(unFavorite.fulfilled, (state:ArticleState, action: PayloadAction<any>) => {
-            const globalId:number = state.globalArticles.findIndex((a:Article) => a.slug === action.payload.slug)
-            const feedId:number = state.feedArticles.findIndex((a:Article) => a.slug === action.payload.slug)
-
-            globalId !== -1 && (state.globalArticles[globalId] = action.payload)
-            feedId !== -1 && (state.feedArticles[feedId] = action.payload)
+            const id:number = state.articles.findIndex((a:Article) => a.slug === action.payload.slug)
+            id !== -1 && (state.articles[id] = action.payload)
         })
     }
 });
