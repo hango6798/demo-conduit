@@ -41,9 +41,9 @@ export const Profile = () => {
         }
         return <>
             <FontAwesomeIcon icon={following ? faMinus : faPlus} className="me-2"/> 
-            {following ? "Unfollow" : "Follow"} {currentProfile.username}
+            {following ? "Unfollow" : "Follow"}
         </>
-    }, [currentProfile.username, following, isUserProfile])
+    }, [following, isUserProfile])
 
     useEffect(() => {
         !isUserProfile && dispatch(getProfile(usernameParam))

@@ -1,16 +1,12 @@
 import Skeleton from "react-loading-skeleton"
 import './style.scss'
 import { ListGroup } from "react-bootstrap"
+import { AuthorSkeleton } from "../../Author/AuthorSkeleton"
 
 export const ArticleSkeleton = () => {
     return <div className="p-3 border rounded h-100">
         <div className="d-flex justify-content-between align-items-center">
-            <div className="d-flex align-items-center">
-                <Skeleton width={40} height={40} className="me-2 rounded"/>
-                <div>
-                    <Skeleton width={110} height={20} count={2}/>
-                </div>
-            </div>
+            <AuthorSkeleton />
             <Skeleton width={70} height={30}/>
         </div>
         <hr className="mt-3 mb-2"/>

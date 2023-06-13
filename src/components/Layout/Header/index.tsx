@@ -38,11 +38,11 @@ const Header = () => {
                 <Navbar>
                     {
                         userLoading ?
-                        <NavDropdown title={<span><img src="https://api.realworld.io/images/smiley-cyrus.jpeg" alt="" />User name</span>} id="collasible-nav-dropdown" className="ms-auto">
+                        <NavDropdown title={<span className="text-secondary"><img src="https://api.realworld.io/images/smiley-cyrus.jpeg" alt="" />User name</span>} id="collasible-nav-dropdown" className="ms-auto">
                         </NavDropdown>
                         :
                         user.token ? 
-                        <NavDropdown title={<span><img src={user.image} alt="" />{userName}</span>} id="collasible-nav-dropdown" className="ms-auto">
+                        <NavDropdown title={<span className="text-secondary"><img src={user.image} alt="" />{userName}</span>} id="collasible-nav-dropdown" className="ms-auto">
                             <Link className="dropdown-item" to="/editor">
                                 <FontAwesomeIcon icon={faPenToSquare} className="me-2"/>
                                 New Article

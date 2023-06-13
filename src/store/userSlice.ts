@@ -117,6 +117,7 @@ export const userSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
+        // Fetch User
         builder.addCase(fetchUser.pending, (state) => {
             state.status.getUser = "loading"
         })
@@ -133,6 +134,7 @@ export const userSlice = createSlice({
             }
             state.error.getUser = listError[listError.length - 1]
         })
+        // Login
         builder.addCase(login.pending, (state) => {
             state.status.login = "loading"
         })
@@ -152,6 +154,7 @@ export const userSlice = createSlice({
                 state.error.login = listError[listError.length - 1]
             }
         })
+        // Register
         builder.addCase(register.pending, (state) => {
             state.status.register = "loading"
         })
@@ -169,6 +172,7 @@ export const userSlice = createSlice({
             }
             state.error.register = listError[listError.length - 1]
         })
+        // Update User
         builder.addCase(updateUser.pending, (state) => {
             state.status.updateUser = "loading"
         })

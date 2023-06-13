@@ -1,4 +1,4 @@
-import { Articles } from "../models"
+import { Article } from "../models"
 import { ParamsArticle } from "../models"
 import axiosClient from "./axiosClient"
 
@@ -15,9 +15,29 @@ const articlesApi = {
         const url = `articles/${slug}/favorite`
         return axiosClient.post(url)
     },
-    unFavorite(slug:string):Promise<any>{
+    unFavorite(slug:string):Promise<any> {
         const url = `articles/${slug}/favorite`
         return axiosClient.delete(url)
+    },
+    getCurrentArticle(slug:string):Promise<any> {
+        const url = `articles/${slug}`
+        return axiosClient.get(url)
+    },
+    createArticle(newArticle: Article):Promise<any> {
+        const url = `articles`
+        return axiosClient.post(url, {
+            "article": newArticle,
+        })
+    },
+    updateArticle(slug:string, data: Article):Promise<any> {
+        const url = `articles/${slug}`
+        return axiosClient.put(url, {
+            "article": data,
+        })
+    },
+    deleteArticle(slug:string):Promise<any> {
+        const url = `articles/${slug}`
+        return axiosClient.delete(url)    
     }
 }
 

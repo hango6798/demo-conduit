@@ -77,6 +77,7 @@ export const profilesSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
+        // Get Profile
         builder.addCase(getProfile.pending, (state) => {
             state.status.getProfile = "loading"
         })
@@ -93,6 +94,7 @@ export const profilesSlice = createSlice({
             }
             state.error.getProfile = listError[listError.length - 1]
         })
+        // Follow
         builder.addCase(follow.pending, (state) => {
             state.status.follow = "loading"
         })
@@ -111,6 +113,7 @@ export const profilesSlice = createSlice({
                 state.error.follow = listError[listError.length - 1]
             }
         })
+        // Unfollow
         builder.addCase(unfollow.pending, (state) => {
             state.status.follow = "loading"
         })
