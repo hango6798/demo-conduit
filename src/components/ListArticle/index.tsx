@@ -1,7 +1,7 @@
 import { ListGroup, Row, Col } from "react-bootstrap"
 import { Article } from "../../models"
 import { ArticleItem } from "./ArticleItem"
-import { ArticleSkeleton } from "./ArticleItem/ArticleSkeleton"
+import { ArticleSkeleton } from "../Skeleton/ArticleSkeleton"
 import { useAppSelector } from "../../store/hooks"
 
 interface Props {

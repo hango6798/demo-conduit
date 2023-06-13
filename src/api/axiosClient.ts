@@ -1,5 +1,5 @@
 import axios, { Axios } from "axios";
-import { store } from "../store/store";
+import { store } from "../store";
 
 const axiosClient = axios.create({
     baseURL: 'https://conduit.productionready.io/api',

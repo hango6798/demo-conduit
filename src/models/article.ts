@@ -2,8 +2,6 @@ import { PaginationParams } from "./common";
 import { Author } from "./user";
 
 export interface Article{
-    id?:number;
-    authorId?: number;
     slug: string;
     title: string;
     description: string;
@@ -14,7 +12,6 @@ export interface Article{
     favorited: boolean;
     favoritesCount: number;
     author: Author
-    favoritedBy?: Author[];
 }
 
 export interface Articles{

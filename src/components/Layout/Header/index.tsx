@@ -29,6 +29,10 @@ const Header = () => {
         dispatch(logout())
     }
 
+    const handleNavClick = () => {
+        window.scrollTo(0, 0)
+    }
+
     return <div className="shadow-sm sticky-top" style={{zIndex: 1030}}>
         <Navbar collapseOnSelect expand="lg" bg="white" variant="light">
             <Container fluid className="px-md-4 px-xs-3">
@@ -43,15 +47,15 @@ const Header = () => {
                         :
                         user.token ? 
                         <NavDropdown title={<span className="text-secondary"><img src={user.image} alt="" />{userName}</span>} id="collasible-nav-dropdown" className="ms-auto">
-                            <Link className="dropdown-item" to="/editor">
+                            <Link className="dropdown-item" to="/editor" onClick={handleNavClick}>
                                 <FontAwesomeIcon icon={faPenToSquare} className="me-2"/>
                                 New Article
                             </Link>
-                            <Link className="dropdown-item" to="/settings">
+                            <Link className="dropdown-item" to="/settings" onClick={handleNavClick}>
                                 <FontAwesomeIcon icon={faGear} className="me-2"/>
                                 Settings
                             </Link>
-                            <Link className="dropdown-item" to={`/profiles/@${user.username}`}>
+                            <Link className="dropdown-item" to={`/profiles/@${user.username}`} onClick={handleNavClick}>
                                 <FontAwesomeIcon icon={faUser} className="me-2"/>
                                 Profile
                             </Link>

@@ -1,7 +1,7 @@
 import Skeleton from "react-loading-skeleton"
-import './style.scss'
+import '../ListArticle/ArticleItem/style.scss'
 import { ListGroup } from "react-bootstrap"
-import { AuthorSkeleton } from "../../Author/AuthorSkeleton"
+import { AuthorSkeleton } from "./AuthorSkeleton"
 
 export const ArticleSkeleton = () => {
     return <div className="p-3 border rounded h-100">

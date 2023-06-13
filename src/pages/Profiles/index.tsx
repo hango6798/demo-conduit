@@ -13,7 +13,7 @@ import { Tabs } from "../../components/Tabs"
 import { Pagination } from "../../components/Pagination"
 import { ParamsArticle } from "../../models"
 import { ListArticle } from "../../components/ListArticle"
-import { fetchGlobalArticles } from "../../store/ArticlesSlice"
+import { fetchGlobalArticles } from "../../store/articlesSlice"
 
 export const Profile = () => {
     const navigate = useNavigate()

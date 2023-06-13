@@ -136,7 +136,7 @@ export const Settings = () => {
                 </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-4">
-                <Form.Label>Confirm New Password</Form.Label>
+                <Form.Label>Confirm Password</Form.Label>
                 <Form.Control type="password" placeholder="Confirm Password" {...formik.getFieldProps('confirmPassword')} isInvalid={!!errors.confirmPassword && touched.confirmPassword} disabled={disabled}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.confirmPassword}

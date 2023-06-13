@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { Col, Row } from "react-bootstrap"
 import { useAppDispatch, useAppSelector } from "../../store/hooks"
-import { fetchFeedArticles, fetchGlobalArticles, setCurrentFavSlug } from "../../store/ArticlesSlice"
+import { fetchFeedArticles, fetchGlobalArticles, setCurrentFavSlug } from "../../store/articlesSlice"
 import { ParamsArticle } from "../../models"
 import { Pagination } from "../../components/Pagination"
 import { useNavigate } from "react-router-dom"

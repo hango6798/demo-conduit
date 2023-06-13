@@ -13,10 +13,7 @@ export interface Author {
     following: boolean;
     username: string;
     bio: string;
-    demo?: boolean;
     image: string;
-    email?: string;
-    id?: number;
 }
 
 export type Login = Pick<User, 'email' | 'password'>

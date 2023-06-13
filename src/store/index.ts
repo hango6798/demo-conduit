@@ -2,7 +2,7 @@ import { configureStore, ThunkAction, Action, combineReducers} from '@reduxjs/to
 import storage from 'redux-persist/lib/storage'
 import { persistStore, persistReducer } from 'redux-persist'
 import userReducer from './userSlice'
-import articlesReducer from './ArticlesSlice'
+import articlesReducer from './articlesSlice'
 import tagsReducer from './tagsSlice'
 import profilesReducer from './profilesSlice'
 

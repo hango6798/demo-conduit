@@ -2,7 +2,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button } from "react-bootstrap"
 import { useAppDispatch, useAppSelector } from "../../store/hooks"
-import { unFavorite, favorite, setCurrentFavSlug } from "../../store/ArticlesSlice"
+import { unFavorite, favorite, setCurrentFavSlug } from "../../store/articlesSlice"
 import { setShowPopup } from "../../store/userSlice"
 import { Article } from "../../models"
 
