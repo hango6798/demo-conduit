@@ -23,7 +23,7 @@ export const ListArticle = ({limit, currentTab, currentPage, currentTag}:Props) 
                 {
                     status === "loading" && 
                     Array(limit).fill(0).map((item, index:number) => {
-                        return <Col xs={12} md={6} key={index} className="mb-3">
+                        return <Col xs={12} key={index} className="mb-3">
                             <ArticleSkeleton/>
                         </Col>
                     })
@@ -32,7 +32,7 @@ export const ListArticle = ({limit, currentTab, currentPage, currentTag}:Props) 
                     status === "idle" && 
                     (articles.length === 0 ? <div className="text-center">No articles are here... yet.</div>
                     : articles.map((article:Article, index:number) => {
-                        return <Col xs={12} md={6} key={index} className="mb-3">
+                        return <Col xs={12} key={index} className="mb-4">
                             <ArticleItem article={article} currentTab={currentTab} currentPage={currentPage} currentTag={currentTag}/>
                         </Col>
                     }))

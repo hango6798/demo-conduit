@@ -29,7 +29,7 @@ const Header = () => {
         dispatch(logout())
     }
 
-    return <div className="shadow-sm sticky-top">
+    return <div className="shadow-sm sticky-top" style={{zIndex: 1030}}>
         <Navbar collapseOnSelect expand="lg" bg="white" variant="light">
             <Container fluid className="px-md-4 px-xs-3">
                 <Navbar.Brand>

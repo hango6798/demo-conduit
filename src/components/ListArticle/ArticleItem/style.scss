@@ -1,27 +1,34 @@
 
 
-.authorName{
+.article-item{
+    box-shadow: 0 1px 5px rgba($color: #000000, $alpha: 0.2);
+    transition: box-shadow 0.3s;
     &:hover{
-        opacity: 0.8;
+        box-shadow: 0 4px 10px rgba($color: #000000, $alpha: 0.3);
     }
-}
-.title{
-    height: 48px;
-    &:hover{
-        opacity: 0.8;
+    .authorName{
+        &:hover{
+            opacity: 0.8;
+        }
     }
-}
-.readmore{
-    width: 80px;
-    &:hover{
-        color: #333!important;
+    .title{
+        height: 48px;
+        &:hover{
+            opacity: 0.8;
+        }
     }
-}
-.desc{
-    height: 63px;
-}
-.tag-list{
-    .list-group-item{
-        margin-top: 0.25rem;
+    .readmore{
+        width: 80px;
+        &:hover{
+            color: #333!important;
+        }
+    }
+    .desc{
+        height: 63px;
+    }
+    .tag-list{
+        .list-group-item{
+            margin-top: 0.25rem;
+        }
     }
 }

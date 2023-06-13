@@ -11,12 +11,14 @@ export interface UserState {
   status: {
     login: Status,
     register: Status,
-    getUser: Status
+    getUser: Status,
+    updateUser: Status,
   }
   error: {
     login: string | null,
     register: string | null,
     getUser: string | null,
+    updateUser: string | null,
   };
   token: string | undefined;
   showPopup: boolean;
@@ -33,12 +35,14 @@ const initialState:UserState = {
   status: {
     login: 'idle',
     register: 'idle',
-    getUser: 'idle'
+    getUser: 'idle',
+    updateUser: 'idle',
   },
   error: {
     login: null,
     register: null,
     getUser: null,
+    updateUser: null,
   },
   token: undefined,
   showPopup: false,
@@ -83,6 +87,21 @@ export const register = createAsyncThunk(
         }
     }
 )
+
+export const updateUser = createAsyncThunk(
+    'user/updateUser',
+    // eslint-disable-next-line no-shadow-restricted-names
+    async (newInfo:User,{dispatch, getState, rejectWithValue, fulfillWithValue}) => {
+        try {
+            const response = await userApi.updateUser(newInfo)
+            const data = await response.data.user
+            return fulfillWithValue(data)
+        } catch (error:any) {
+            throw rejectWithValue(error.response.data.errors)
+        }
+    }
+)
+
 export const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -149,6 +168,23 @@ export const userSlice = createSlice({
                 listError.push(message)
             }
             state.error.register = listError[listError.length - 1]
+        })
+        builder.addCase(updateUser.pending, (state) => {
+            state.status.updateUser = "loading"
+        })
+        builder.addCase(updateUser.fulfilled, (state:UserState, action: PayloadAction<any>) => {
+            state.status.updateUser = "idle"
+            state.user = action.payload
+            state.token = action.payload.token
+        })
+        builder.addCase(updateUser.rejected, (state:UserState, action: PayloadAction<any>) => {
+            state.status.updateUser = "failed"
+            const listError = []
+            for(let key of Object.keys(action.payload)){
+                const message = key[0].toUpperCase() + key.slice(1) + ' ' + action.payload[key]
+                listError.push(message)
+            }
+            state.error.updateUser = listError[listError.length - 1]
         })
     }
 });

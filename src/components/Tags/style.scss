@@ -1,0 +1,13 @@
+
+.tag-item{
+    cursor: pointer;
+    &:last-child{
+        border-bottom: 0!important;
+    }
+    &:hover{
+        background: #f4f8fc;
+    }
+    &.active{
+        background: #f4f8fc;
+    }
+}

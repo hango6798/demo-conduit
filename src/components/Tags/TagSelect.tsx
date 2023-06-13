@@ -5,11 +5,10 @@ import { Form } from "react-bootstrap"
 
 interface Props {
     currentTag: string;
-    setCurrentTag: React.Dispatch<React.SetStateAction<string>>;
     handleTagChange: (e:React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-export const Tags = ({currentTag, setCurrentTag, handleTagChange} : Props) => {
+export const TagSelect = ({currentTag, handleTagChange} : Props) => {
     const dispatch = useAppDispatch()
     const {tags} = useAppSelector(store => store.tagsReducer)
 
@@ -18,7 +17,7 @@ export const Tags = ({currentTag, setCurrentTag, handleTagChange} : Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    return <Form.Select className="w-100" onChange={handleTagChange} value={currentTag} style={{height: "42px", marginBottom: "10px"}}>
+    return <Form.Select onChange={handleTagChange} value={currentTag} style={{height: "42px", marginBottom: "10px"}}>
         <option disabled value="">Tags</option>
         {
             tags.map((tag:string, index:number) => {

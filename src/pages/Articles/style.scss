@@ -1,0 +1,16 @@
+
+.tag-select{
+    display: none;
+}
+@media screen and (max-width: 767px) {
+    .tabs{
+        margin-bottom: 10px!important;
+    }
+    .tag-select{
+        display: block;
+        width: 100%;
+    }
+    .popular-tags{
+        display: none;
+    }
+}

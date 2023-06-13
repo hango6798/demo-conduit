@@ -1,15 +1,27 @@
 
 .tabs{
-    .nav-link{
-        border: 1px solid #0d6efd;
-        margin-bottom: 10px;
-    }
-    @media screen and (max-width: 425px){
-        .nav-item{
-            margin-right: 0.25rem!important;
-        }
+    flex-wrap: nowrap;
+    margin: 0 -5px;
+    overflow: hidden;
+    .nav-item{
+        width: 100%;
+        margin: 0 5px;
         .nav-link{
-            padding: 0.5rem!important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #0d6efd;
+            margin-bottom: 5px;
+        }
+    }
+}
+@media screen and (max-width: 600px) {
+    .tabs{
+        .nav-item{
+            width: auto;
+            .nav-link{
+                padding: 0.5rem!important;
+            }
         }
     }
 }

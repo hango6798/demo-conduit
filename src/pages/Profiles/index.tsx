@@ -73,14 +73,12 @@ export const Profile = () => {
             name: 'myArticles',
             hide: false,
             disabled: false,
-            className: 'me-3',
             content: 'My Articles',
         },
         {
             name: 'favorited',
             hide: false,
             disabled: false,
-            className: '',
             content: 'Favorited Articles'
         }
     ]
@@ -101,7 +99,7 @@ export const Profile = () => {
         }
     }
     // pagination
-    const limit = 10
+    const limit = 5
     const pagesCount = useMemo(() => {
         return Math.ceil(articlesCount / limit)
     }, [articlesCount])
@@ -169,7 +167,7 @@ export const Profile = () => {
             }
             {/* Tabs */}
             <Row className="my-4">
-                <Col xs={12} className="d-flex justify-content-between flex-wrap mb-3">
+                <Col xs={12}>
                     <Tabs listTabs={listTabs} handleTabClick={handleTabClick} currentTab={currentTab}/>
                 </Col>
                 <Col xs={12}>

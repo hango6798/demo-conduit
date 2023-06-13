@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Pagination as PagiBootstrap } from "react-bootstrap"
 
 interface Props {
@@ -7,7 +8,11 @@ interface Props {
 }
 
 export const Pagination = ({currentPage, setCurrentPage, pagesCount} : Props) => {
-    
+
+    useEffect(() => {
+        window.scrollTo(0,0)
+    }, [currentPage])
+
     return pagesCount > 1 ? <PagiBootstrap className="d-flex justify-content-center mt-3">
         <PagiBootstrap.First disabled={currentPage === 1} onClick={() => setCurrentPage(1)}/>
         <PagiBootstrap.Prev disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}/>

@@ -50,7 +50,7 @@ export const ArticleItem = ({article, currentTab, currentPage, currentTag} : Pro
         window.scrollTo(0,0)
     }
 
-    return <div className="p-3 border rounded h-100">
+    return <div className="p-3 article-item rounded">
         <div className="d-flex justify-content-between align-items-center">
             <div className="d-flex align-items-center">
                 <Link to={authorUrl} className="me-2" onClick={handleAuthorClick}>
