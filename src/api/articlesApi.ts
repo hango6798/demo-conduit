@@ -15,7 +15,7 @@ const articlesApi = {
         const url = `articles/${slug}/favorite`
         return axiosClient.post(url)
     },
-    unFavorite(slug:string):Promise<any> {
+    unfavorite(slug:string):Promise<any> {
         const url = `articles/${slug}/favorite`
         return axiosClient.delete(url)
     },

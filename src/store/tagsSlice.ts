@@ -14,7 +14,7 @@ const initialState:tagsState = {
 export const fetchTags = createAsyncThunk(
     'tags/fetchTags',
     // eslint-disable-next-line no-shadow-restricted-names
-    async (undefined,{dispatch, getState, rejectWithValue, fulfillWithValue}) => {
+    async (undefined,{ rejectWithValue, fulfillWithValue}) => {
         try {
             const response = await tagsApi.getAll()
             const data = await response.data.tags

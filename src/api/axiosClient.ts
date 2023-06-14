@@ -1,5 +1,5 @@
-import axios, { Axios } from "axios";
-import { store } from "../store";
+import axios from "axios";
+import { store } from "../store/store";
 
 const axiosClient = axios.create({
     baseURL: 'https://conduit.productionready.io/api',
@@ -14,7 +14,7 @@ axiosClient.interceptors.request.use(
         const currentStore = store.getState()
         const token = currentStore.userReducer.token
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = token ? `Bearer ${token}` : undefined;
         }
         return config;
     },

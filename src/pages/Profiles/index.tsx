@@ -172,7 +172,7 @@ export const Profile = () => {
                 </Col>
                 <Col xs={12}>
                     {/* list articles */}
-                    <ListArticle limit={limit} currentPage={currentPage} currentTab={currentTab}/>
+                    <ListArticle limit={limit}/>
                     {/* Pagination */}
                     <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pagesCount={pagesCount}/>
                 </Col>

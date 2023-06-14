@@ -51,7 +51,7 @@ const initialState:UserState = {
 export const fetchUser = createAsyncThunk(
     'user/fetchUser',
     // eslint-disable-next-line no-shadow-restricted-names
-    async (undefined,{dispatch, getState, rejectWithValue, fulfillWithValue}) => {
+    async (undefined,{getState, rejectWithValue, fulfillWithValue}) => {
         try {
             const response = await userApi.getCurrentUser()
             const data = await response.data.user
@@ -64,7 +64,7 @@ export const fetchUser = createAsyncThunk(
 
 export const login = createAsyncThunk(
     'user/login',
-    async (loginInfo: Login, {dispatch, getState, rejectWithValue, fulfillWithValue}) => {
+    async (loginInfo: Login, { rejectWithValue, fulfillWithValue}) => {
         try {
             const response = await userApi.login(loginInfo)
             const data = await response.data.user
@@ -77,7 +77,7 @@ export const login = createAsyncThunk(
 
 export const register = createAsyncThunk(
     'user/register',
-    async (newUserInfo: NewUser, {dispatch, getState, rejectWithValue, fulfillWithValue}) => {
+    async (newUserInfo: NewUser, { rejectWithValue, fulfillWithValue}) => {
         try {
             const response = await userApi.register(newUserInfo)
             const data = await response.data.user
@@ -91,7 +91,7 @@ export const register = createAsyncThunk(
 export const updateUser = createAsyncThunk(
     'user/updateUser',
     // eslint-disable-next-line no-shadow-restricted-names
-    async (newInfo:User,{dispatch, getState, rejectWithValue, fulfillWithValue}) => {
+    async (newInfo:User,{ rejectWithValue, fulfillWithValue}) => {
         try {
             const response = await userApi.updateUser(newInfo)
             const data = await response.data.user

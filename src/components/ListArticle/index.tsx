@@ -6,12 +6,9 @@ import { useAppSelector } from "../../store/hooks"
 
 interface Props {
     limit: number;
-    currentTab?: string;
-    currentPage: number;
-    currentTag?:string;
 }
 
-export const ListArticle = ({limit, currentTab, currentPage, currentTag}:Props) => {
+export const ListArticle = ({limit}:Props) => {
     const {status, articles} = useAppSelector(store => store.articlesReducer)
     return <>
         <ListGroup className="border-0">
@@ -33,7 +30,7 @@ export const ListArticle = ({limit, currentTab, currentPage, currentTag}:Props) 
                     (articles.length === 0 ? <div className="text-center">No articles are here... yet.</div>
                     : articles.map((article:Article, index:number) => {
                         return <Col xs={12} key={index} className="mb-4">
-                            <ArticleItem article={article} currentTab={currentTab} currentPage={currentPage} currentTag={currentTag}/>
+                            <ArticleItem article={article}/>
                         </Col>
                     }))
                 }

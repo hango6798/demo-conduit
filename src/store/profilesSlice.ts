@@ -21,7 +21,7 @@ const initialState:UserState = {
         username: '',
         bio: '',
         image: '',
-        following: ''
+        following: false
     },
     status: {
         getProfile: "idle",
@@ -36,7 +36,7 @@ const initialState:UserState = {
 export const getProfile = createAsyncThunk(
     'profiles/getProfile',
     // eslint-disable-next-line no-shadow-restricted-names
-    async (username:string,{dispatch, getState, rejectWithValue, fulfillWithValue}) => {
+    async (username:string,{ rejectWithValue, fulfillWithValue}) => {
         try {
             const response = await profilesApi.getProfile(username)
             const data = await response.data.profile
@@ -49,7 +49,7 @@ export const getProfile = createAsyncThunk(
 
 export const follow = createAsyncThunk(
     'profiles/follow',
-    async (username:string, {dispatch, getState, rejectWithValue, fulfillWithValue}) => {
+    async (username:string, { rejectWithValue, fulfillWithValue}) => {
         try {
             const response = await profilesApi.follow(username)
             const data = await response.data.profile
@@ -62,7 +62,7 @@ export const follow = createAsyncThunk(
 
 export const unfollow = createAsyncThunk(
     'profiles/unfollow',
-    async (username:string, {dispatch, getState, rejectWithValue, fulfillWithValue}) => {
+    async (username:string, { rejectWithValue, fulfillWithValue}) => {
         try {
             const response = await profilesApi.unfollow(username)
             const data = await response.data.profile
@@ -97,6 +97,7 @@ export const profilesSlice = createSlice({
         // Follow
         builder.addCase(follow.pending, (state) => {
             state.status.follow = "loading"
+            state.profile.following = true
         })
         builder.addCase(follow.fulfilled, (state:UserState, action: PayloadAction<any>) => {
             state.status.follow = "idle"
@@ -112,10 +113,12 @@ export const profilesSlice = createSlice({
                 }
                 state.error.follow = listError[listError.length - 1]
             }
+            state.profile.following = false
         })
         // Unfollow
         builder.addCase(unfollow.pending, (state) => {
             state.status.follow = "loading"
+            state.profile.following = false
         })
         builder.addCase(unfollow.fulfilled, (state:UserState, action: PayloadAction<any>) => {
             state.status.follow = "idle"
@@ -129,6 +132,7 @@ export const profilesSlice = createSlice({
                 listError.push(message)
             }
             state.error.follow = listError[listError.length - 1]
+            state.profile.following = true
         })
     }
 });

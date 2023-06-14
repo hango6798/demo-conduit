@@ -5,6 +5,7 @@ import userReducer from './userSlice'
 import articlesReducer from './articlesSlice'
 import tagsReducer from './tagsSlice'
 import profilesReducer from './profilesSlice'
+import commentsReducer from './commentsSlice'
 
 const persistConfig = {
   key: 'root',
@@ -17,6 +18,7 @@ const persistedReducer = persistReducer(persistConfig, combineReducers({
     articlesReducer,
     tagsReducer,
     profilesReducer,
+    commentsReducer
 }))
 
 

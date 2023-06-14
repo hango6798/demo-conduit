@@ -130,7 +130,7 @@ export const Articles = () => {
                         <TagSelect currentTag={currentTag} handleTagChange={handleTagChange}/>
                     </div>
                     {/* List article */}
-                    <ListArticle limit={limit} currentTab={currentTab} currentPage={currentPage} currentTag={currentTag}/>
+                    <ListArticle limit={limit}/>
                     {/* Pagination */}
                     <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pagesCount={pagesCount}/>
                 </Col>

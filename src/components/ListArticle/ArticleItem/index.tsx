@@ -1,32 +1,20 @@
 import { ListGroup } from "react-bootstrap"
 import { Article } from "../../../models"
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
 import './style.scss'
 import { FavoriteButton } from "../../FavoriteButton";
 import { Author } from "../../Author";
 
 interface Props {
     article: Article;
-    currentTab?: string;
-    currentPage?: number;
-    currentTag?: string;
 }
 
-export const ArticleItem = ({article, currentTab, currentPage, currentTag} : Props) => {
-    const [favCount, setFavCount] = useState<number>(article.favoritesCount)
-    const [favActive, setFavActive] = useState<boolean>(article.favorited)
+export const ArticleItem = ({article} : Props) => {
 
     const articleUrl = `/article/${article.slug}`
-    
+
     const author = article.author
     const createdTime = new Date(article.createdAt).toLocaleString('en-us',{ month:'long', day: 'numeric', year:'numeric'})
-
-    useEffect(() => {
-        setFavActive(article.favorited)
-        setFavCount(article.favoritesCount)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentTab, currentPage, currentTag])
 
     const handleArticleClick = () => {
         window.scrollTo(0,0)
@@ -35,7 +23,7 @@ export const ArticleItem = ({article, currentTab, currentPage, currentTag} : Pro
     return <div className="p-3 article-item rounded">
         <div className="d-flex justify-content-between align-items-center">
             <Author author={author} createdTime={createdTime} variant="light"/>
-            <FavoriteButton article={article} favActive={favActive} setFavActive={setFavActive} favCount={favCount} setFavCount={setFavCount}/>
+            <FavoriteButton article={article}/>
         </div>
         <hr className="mt-3 mb-2"/>
         <Link to={articleUrl} className="title text-dark h5 mb-2 truncate-2" onClick={handleArticleClick}>

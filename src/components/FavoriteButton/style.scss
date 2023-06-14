@@ -1,0 +1,9 @@
+
+.btn{
+    &.active{
+        &:disabled{
+            background: #0d6efd!important;
+            color: #FFF!important;
+        }
+    }
+}
