@@ -2,7 +2,7 @@ import axios from "axios";
 import { store } from "../store/store";
 
 const axiosClient = axios.create({
-    baseURL: 'https://conduit.productionready.io/api',
+    baseURL: "https://api.realworld.io/api",
     headers: {
         "Content-Type": 'application/json',
     }

@@ -6,11 +6,11 @@ import { fetchUser } from "../../store/userSlice"
 
 export const Layout = () => {
     const dispatch = useAppDispatch()
-    const {user, token} = useAppSelector(store => store.userReducer)
+    const {token} = useAppSelector(store => store.userReducer)
     useEffect(() => {
-        (!user.username && token) && dispatch(fetchUser())
+       token && dispatch(fetchUser())
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user.username, token])
+    }, [token])
 
     return <div>
         <Header/>

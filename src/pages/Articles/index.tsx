@@ -12,6 +12,7 @@ import { Tabs } from "../../components/Tabs"
 import { ListArticle } from "../../components/ListArticle"
 import "./style.scss"
 import { TagSelect } from "../../components/Tags/TagSelect"
+import { fetchTags } from "../../store/tagsSlice"
 
 export const Articles = () => {
     const navigate = useNavigate()
@@ -59,16 +60,26 @@ export const Articles = () => {
     }
 
     useEffect(() => {
+        dispatch(fetchTags())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+    
+    useEffect(() => {
         if(token) {
             if(currentFavSlug) {
                 navigate(`/article/${currentFavSlug}`)
                 dispatch(setCurrentFavSlug(null))
             }
-            setCurrentTab('feed')
+            else{
+                setCurrentTab('feed')
+                setCurrentPage(1)
+            }
         }
         else{
             setCurrentTab('global')
+            setCurrentPage(1)
         }
+        setCurrentTag('')
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token])
 

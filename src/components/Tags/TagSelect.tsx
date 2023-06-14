@@ -1,6 +1,5 @@
-import React, { useEffect } from "react"
-import { useAppDispatch, useAppSelector } from "../../store/hooks"
-import { fetchTags } from "../../store/tagsSlice"
+import React from "react"
+import { useAppSelector } from "../../store/hooks"
 import { Form } from "react-bootstrap"
 
 interface Props {
@@ -9,13 +8,7 @@ interface Props {
 }
 
 export const TagSelect = ({currentTag, handleTagChange} : Props) => {
-    const dispatch = useAppDispatch()
     const {tags} = useAppSelector(store => store.tagsReducer)
-
-    useEffect(() => {
-        dispatch(fetchTags())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
 
     return <Form.Select onChange={handleTagChange} value={currentTag} style={{height: "42px", marginBottom: "10px"}}>
         <option disabled value="">Tags</option>

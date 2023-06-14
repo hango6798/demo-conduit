@@ -1,11 +1,11 @@
 import { createBrowserRouter } from "react-router-dom"
 import { Layout } from "./components/Layout"
-import { Articles } from "./pages/Articles"
 import { RequiredAuth } from "./components/RequiredAuth"
 import { ArticleDetail } from "./pages/ArticleDetail"
 import { Editor } from "./pages/Editor"
 import { Profile } from "./pages/Profiles"
 import { Settings } from "./pages/Settings"
+import { Articles } from "./pages/Articles"
 
 export const router = createBrowserRouter([
     {
