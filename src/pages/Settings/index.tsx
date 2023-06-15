@@ -22,6 +22,7 @@ export const Settings = () => {
     const [imageUrl, setImageUrl] = useState<string>(user.image)
     const [imgUrlLoading, setImgUrlLoading] = useState<boolean>(false)
 
+    // Formik
     const defaultValues = {
         image: user.image,
         username: user.username,
@@ -64,38 +65,41 @@ export const Settings = () => {
         validate,
         validationSchema,
     })
+
     useEffect(() => {
         setImageUrl(user.image)
         formik.setValues(defaultValues)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user])
+
     const errors = formik.errors
     const touched = formik.touched
 
-    const handleChangeAvatar = (e:React.ChangeEvent<HTMLInputElement>) => {
+    // Events
+    function handleChangeAvatar(e: React.ChangeEvent<HTMLInputElement>) {
         const files = e.target.files
         const payload = new FormData()
-        const getBase64 = (file: any , callback: any) => {
-            const reader = new FileReader();
-            reader.addEventListener('load', () => callback(reader.result));
-            reader.readAsDataURL(file);
+        const getBase64 = (file: any, callback: any) => {
+            const reader = new FileReader()
+            reader.addEventListener('load', () => callback(reader.result))
+            reader.readAsDataURL(file)
         }
 
-        if(files && files.length) {
-            getBase64(files[0], (base64File:any) => {
+        if (files && files.length) {
+            getBase64(files[0], (base64File: any) => {
                 payload.append('image', base64File.toString().split(',')[1])
                 setImgUrlLoading(true)
                 axios.post(`https://api.imgbb.com/1/upload?key=80523bcf4b9e9bcc56c484eedd12954e`, payload)
-                .then(res => {
-                    setImageUrl(res.data.data.image.url)
-                })
-                .catch((error) => {
-                    console.log(error)
-                    alert("Try again!")
-                })
-                .finally(() => {
-                    setImgUrlLoading(false)
-                })
+                    .then(res => {
+                        setImageUrl(res.data.data.image.url)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        alert("Try again!")
+                    })
+                    .finally(() => {
+                        setImgUrlLoading(false)
+                    })
             })
         }
 
@@ -106,6 +110,7 @@ export const Settings = () => {
             <p className="h4 text-center text-primary mb-2">
                 Your Settings
             </p>
+            {/* Avatar */}
             <Form.Group controlId="formFile" className="mb-3">
                 <Form.Label className="d-inline-block">
                     Avatar
@@ -122,31 +127,34 @@ export const Settings = () => {
                         }
                     </div>
                 </Form.Label><br />
-                <Form.Control type="file" hidden {...formik.getFieldProps('image')} value="" isInvalid={!!errors.image && touched.image} onChange={handleChangeAvatar} disabled={disabled}/>
+                <Form.Control type="file" hidden {...formik.getFieldProps("image")} value="" isInvalid={!!errors.image && touched.image} onChange={handleChangeAvatar} disabled={disabled}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.image}
                 </Form.Control.Feedback>
             </Form.Group>
-
+            
+            {/* Username */}
             <Form.Group className="mb-3">
                 <Form.Label>Username</Form.Label>
-                <Form.Control type="username" placeholder="Username" {...formik.getFieldProps('username')} isInvalid={!!errors.username && touched.username} disabled={disabled}/>
+                <Form.Control type="text" placeholder="Username" {...formik.getFieldProps("username")} isInvalid={!!errors.username && touched.username} disabled={disabled}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.username}
                 </Form.Control.Feedback>
             </Form.Group>
 
+            {/* Bio */}
             <Form.Group className="mb-3">
                 <Form.Label>Bio</Form.Label>
-                <Form.Control as="textarea" rows={3} placeholder="Short bio about you" {...formik.getFieldProps('bio')} isInvalid={!!errors.bio && touched.bio} disabled={disabled}/>
+                <Form.Control as="textarea" rows={3} placeholder="Short bio about you" {...formik.getFieldProps("bio")} isInvalid={!!errors.bio && touched.bio} disabled={disabled}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.bio}
                 </Form.Control.Feedback>
             </Form.Group>
 
+            {/* Email */}
             <Form.Group className="mb-3">
                 <Form.Label>Email</Form.Label>
-                <Form.Control type="email" placeholder="Email" {...formik.getFieldProps('email')} isInvalid={!!errors.email && touched.email} disabled={disabled}/>
+                <Form.Control type="email" placeholder="Email" {...formik.getFieldProps("email")} isInvalid={!!errors.email && touched.email} disabled={disabled}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.email}
                 </Form.Control.Feedback>
@@ -155,17 +163,20 @@ export const Settings = () => {
             <p className="h4 mt-4 text-center text-primary mb-2">
                 Change Password
             </p>
+
+            {/* New Password */}
             <Form.Group className="mb-3">
                 <Form.Label>New password</Form.Label>
-                <Form.Control type="password" placeholder="New Password" {...formik.getFieldProps('newPassword')} isInvalid={!!errors.newPassword && touched.newPassword} disabled={disabled}/>
+                <Form.Control type="password" placeholder="New Password" {...formik.getFieldProps("newPassword")} isInvalid={!!errors.newPassword && touched.newPassword} disabled={disabled}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.newPassword}
                 </Form.Control.Feedback>
             </Form.Group>
             
+            {/* Confirm Password */}
             <Form.Group className="mb-4">
                 <Form.Label>Confirm Password</Form.Label>
-                <Form.Control type="password" placeholder="Confirm Password" {...formik.getFieldProps('confirmPassword')} isInvalid={!!errors.confirmPassword && touched.confirmPassword} disabled={disabled}/>
+                <Form.Control type="password" placeholder="Confirm Password" {...formik.getFieldProps("confirmPassword")} isInvalid={!!errors.confirmPassword && touched.confirmPassword} disabled={disabled}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.confirmPassword}
                 </Form.Control.Feedback>

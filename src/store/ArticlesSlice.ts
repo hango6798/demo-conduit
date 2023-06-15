@@ -1,4 +1,4 @@
-import { ParamsArticle } from './../models/article';
+import { NewArticle, ParamsArticle } from './../models/article';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Article } from '../models';
 import articlesApi from '../api/articlesApi';
@@ -147,7 +147,7 @@ export const getCurrentArticle = createAsyncThunk(
 
 export const createArticle = createAsyncThunk(
     'articles/createArticle',
-    async (newArticle: Article, { rejectWithValue, fulfillWithValue}) => {
+    async (newArticle: NewArticle, { rejectWithValue, fulfillWithValue}) => {
         try {
             const response = await articlesApi.createArticle(newArticle)
             const data = await response.data.article

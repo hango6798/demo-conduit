@@ -1,4 +1,4 @@
-import { Article } from "../models"
+import { Article, NewArticle } from "../models"
 import { ParamsArticle } from "../models"
 import axiosClient from "./axiosClient"
 
@@ -23,7 +23,7 @@ const articlesApi = {
         const url = `articles/${slug}`
         return axiosClient.get(url)
     },
-    createArticle(newArticle: Article):Promise<any> {
+    createArticle(newArticle: NewArticle):Promise<any> {
         const url = `articles`
         return axiosClient.post(url, {
             "article": newArticle,

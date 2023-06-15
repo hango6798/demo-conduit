@@ -24,3 +24,5 @@ export interface ParamsArticle extends PaginationParams {
     author?: string;
     favorited?: string;
 }
+
+export type NewArticle = Pick<Article, 'title' | 'description' | 'body' | 'tagList'>
