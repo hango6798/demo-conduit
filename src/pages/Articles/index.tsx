@@ -97,6 +97,15 @@ export const Articles = () => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage, currentTag, currentTab])
+    
+    useEffect(() => {
+        const pagiTimeout = setTimeout(() => {
+            window.scrollTo(0,0)
+        },1000)
+        return () => {
+            clearTimeout(pagiTimeout)
+        }
+    }, [currentPage])
 
     const handleTabClick = (tab:string) => {
         setCurrentTab(tab)

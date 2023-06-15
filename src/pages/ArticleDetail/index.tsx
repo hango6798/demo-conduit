@@ -31,6 +31,7 @@ export const ArticleDetail = () => {
     
     const author = currentArticle.author
 
+
     useEffect(() => {
         slug && dispatch(getCurrentArticle(slug))
     // eslint-disable-next-line react-hooks/exhaustive-deps
