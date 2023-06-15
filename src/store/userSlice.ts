@@ -22,6 +22,7 @@ export interface UserState {
   };
   token: string | undefined;
   showPopup: boolean;
+  popupType: 'login' | 'register';
 }
 
 const initialState:UserState = {
@@ -46,6 +47,7 @@ const initialState:UserState = {
   },
   token: undefined,
   showPopup: false,
+  popupType: 'login',
 };
 
 export const fetchUser = createAsyncThunk(
@@ -114,7 +116,10 @@ export const userSlice = createSlice({
         },
         setShowPopup: (state: UserState, action:PayloadAction<boolean>) => {
             state.showPopup = action.payload
-        }
+        },
+        setPopupType: (state: UserState, action:PayloadAction<'login' | 'register'>) => {
+            state.popupType = action.payload
+        },
     },
     extraReducers: (builder) => {
         // Fetch User
@@ -193,7 +198,7 @@ export const userSlice = createSlice({
     }
 });
 
-export const { logout, setShowPopup } = userSlice.actions;
+export const { logout, setShowPopup, setPopupType } = userSlice.actions;
 
 const persistConfig = {
     key: 'token',

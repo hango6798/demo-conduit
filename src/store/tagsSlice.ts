@@ -1,14 +1,16 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import tagsApi from '../api/tagsApi';
 
-export interface tagsState {
+export interface TagsState {
     tags: string[];
     status: 'idle' | 'loading' | 'failed';
+    currentTag: string;
 }
 
-const initialState:tagsState = {
+const initialState:TagsState = {
     tags: [],
     status: 'idle',
+    currentTag: '',
 };
 
 export const fetchTags = createAsyncThunk(
@@ -29,20 +31,24 @@ export const tagsSlice = createSlice({
     name: 'tags',
     initialState,
     reducers: {
+        setCurrentTag: (state: TagsState, action: PayloadAction<string>) => {
+            state.currentTag = action.payload
+        }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchTags.pending, (state:tagsState) => {
+        builder.addCase(fetchTags.pending, (state:TagsState) => {
             state.status = "loading"
         })
-        builder.addCase(fetchTags.fulfilled, (state:tagsState, action: PayloadAction<any>) => {
+        builder.addCase(fetchTags.fulfilled, (state:TagsState, action: PayloadAction<any>) => {
             state.status = "idle"
             state.tags = action.payload
         })
-        builder.addCase(fetchTags.rejected, (state:tagsState, action: PayloadAction<any>) => {
+        builder.addCase(fetchTags.rejected, (state:TagsState, action: PayloadAction<any>) => {
             state.status = "failed"
         })
     }
 });
 
+export const { setCurrentTag } = tagsSlice.actions
 
 export default tagsSlice.reducer

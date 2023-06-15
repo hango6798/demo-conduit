@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from "react"
+import { memo, useMemo } from "react"
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import './style.scss'
@@ -7,21 +7,20 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPenToSquare, faGear, faUser, faRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 
-import { logout, setShowPopup } from "../../../store/userSlice"
+import { logout, setPopupType, setShowPopup } from "../../../store/userSlice"
 
 const Header = () => {
     const dispatch = useAppDispatch()
     const {user, showPopup: show, status} = useAppSelector(store => store.userReducer)
     const userLoading = status.getUser === "loading"
-    const [popupType, setPopupType] = useState<string>('')
 
     const userName:string = useMemo(() => {
         return user.username.length > 10 ? user.username.substring(0,10) + '...' : user.username
     }, [user.username])
 
-    const showPopup = (type:string) => {
+    const showPopup = (type: 'login' | 'register') => {
         dispatch(setShowPopup(true))
-        setPopupType(type)
+        dispatch(setPopupType(type))
     }
 
     const handleLogout = (e: React.MouseEvent<HTMLElement>) => {
@@ -84,7 +83,7 @@ const Header = () => {
             </Container>
         </Navbar>
         {
-            show && <UserPopup popupType={popupType} setPopupType={setPopupType}/>
+            show && <UserPopup/>
         }
     </div>
 }

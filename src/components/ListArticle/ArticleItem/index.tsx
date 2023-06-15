@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 import './style.scss'
 import { FavoriteButton } from "../../FavoriteButton";
 import { Author } from "../../Author";
+import { useAppSelector } from "../../../store/hooks";
 
 interface Props {
     article: Article;
 }
 
 export const ArticleItem = ({article} : Props) => {
-
+    const {currentTag} = useAppSelector(store => store.tagsReducer)
     const articleUrl = `/article/${article.slug}`
 
     const author = article.author
@@ -36,7 +37,7 @@ export const ArticleItem = ({article} : Props) => {
             <ListGroup className="d-flex flex-row flex-wrap tag-list" style={{margin: '0 -0.25rem'}}>
                 {
                     article.tagList.map((tag:string, index:number) => {
-                        return <ListGroup.Item key={index} className="border rounded small text-secondary p-0 px-2 pb-1 mx-1">
+                        return <ListGroup.Item key={index} className={`border rounded small text-secondary p-0 px-2 pb-1 mx-1 ${tag === currentTag && "border-secondary"}`}>
                             {tag}
                         </ListGroup.Item>
                     })

@@ -6,17 +6,12 @@ import * as Yup from 'yup';
 import { Login, NewUser } from '../../models';
 import { useFormik } from "formik"
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { register, login, setShowPopup } from '../../store/userSlice';
+import { register, login, setShowPopup, setPopupType } from '../../store/userSlice';
 import React, { useEffect } from 'react';
 
-interface Props {
-    popupType: string;
-    setPopupType: React.Dispatch<React.SetStateAction<string>>
-}
-
-export const UserPopup = ({ popupType, setPopupType}:Props) => {
+export const UserPopup = () => {
     const dispatch = useAppDispatch()
-    const {error, token, status} = useAppSelector(store => store.userReducer)
+    const {error, token, status, popupType} = useAppSelector(store => store.userReducer)
     
     const handleClose = () => dispatch(setShowPopup(false))
     const isRegister = popupType === 'register'
@@ -24,8 +19,9 @@ export const UserPopup = ({ popupType, setPopupType}:Props) => {
     const title = isRegister ? 'Sign up' : 'Sign in'
     const linkText = isRegister ? 'Have an account?' : 'Need an account?'
 
-    const changePopupType = () => {
-        isRegister ? setPopupType('login') : setPopupType('register')
+    const changePopupType = (e: React.MouseEvent<HTMLElement>) => {
+        e.preventDefault()
+        dispatch(setPopupType(isRegister ? 'login' : 'register'))
     }
 
     const disabled = isRegister ? status.register === "loading" : status.login === "loading"

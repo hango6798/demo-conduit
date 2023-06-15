@@ -85,18 +85,6 @@ export const Profile = () => {
     const handleTabClick = (tab:string) => {
         setCurrentTab(tab)
         setCurrentPage(1)
-        if(tab === 'myArticles') {
-            dispatch(fetchGlobalArticles({
-                ...articleParams,
-                author: usernameParam,
-            }))
-        }
-        else if(tab === 'favorited') {
-            dispatch(fetchGlobalArticles({
-                ...articleParams,
-                favorited: usernameParam,
-            }))
-        }
     }
     // pagination
     const limit = 5
@@ -111,12 +99,12 @@ export const Profile = () => {
 
     useEffect(() => {
         setCurrentTab('myArticles')
-        dispatch(fetchGlobalArticles({
-            ...articleParams,
-            author: usernameParam,
-        }))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [usernameParam])
+        setCurrentPage(1)
+    },[usernameParam])
+
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [currentTab])
 
     useEffect(() => {
         if(currentTab === 'myArticles') {
@@ -132,7 +120,7 @@ export const Profile = () => {
             }))
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentPage])
+    }, [currentPage, currentTab])
 
     return <div>
         <Heading>

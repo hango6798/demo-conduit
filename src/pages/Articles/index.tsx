@@ -12,7 +12,7 @@ import { Tabs } from "../../components/Tabs"
 import { ListArticle } from "../../components/ListArticle"
 import "./style.scss"
 import { TagSelect } from "../../components/Tags/TagSelect"
-import { fetchTags } from "../../store/tagsSlice"
+import { fetchTags, setCurrentTag } from "../../store/tagsSlice"
 
 export const Articles = () => {
     const navigate = useNavigate()
@@ -21,9 +21,8 @@ export const Articles = () => {
     const {currentFavSlug} = useAppSelector(store => store.articlesReducer)
     const {articlesCount} = useAppSelector(store => store.articlesReducer)
     const {token} = useAppSelector(store => store.userReducer)
+    const {currentTag} = useAppSelector(store => store.tagsReducer)
     
-    // tags
-    const [currentTag, setCurrentTag] = useState<string>('')
     // tabs
     const listTabs = [
         {
@@ -79,7 +78,7 @@ export const Articles = () => {
             setCurrentTab('global')
             setCurrentPage(1)
         }
-        setCurrentTag('')
+        dispatch(setCurrentTag(''))
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token])
 
@@ -101,19 +100,19 @@ export const Articles = () => {
 
     const handleTabClick = (tab:string) => {
         setCurrentTab(tab)
-        setCurrentTag('')
+        dispatch(setCurrentTag(''))
         setCurrentPage(1)
     }
 
     const handleTagClick = (tag:string) => {
-        setCurrentTag(tag)
+        dispatch(setCurrentTag(tag))
         setCurrentPage(1)
         setCurrentTab('tag')
         window.scrollTo(0,0)
     }
 
     const handleTagChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
-        setCurrentTag(e.target.value)
+        dispatch(setCurrentTag(e.target.value))
         setCurrentPage(1)
         if(e.target.value !== '') {
             setCurrentTab('tag')
