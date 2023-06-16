@@ -4,18 +4,28 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { ContentWrapper } from "components/Layout/ContentWrapper";
 import "./style.scss";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { fetchTags } from "store/tagsSlice";
-import { createArticle } from "store/articlesSlice";
-import { useNavigate } from "react-router-dom";
+import {
+  createArticle,
+  getCurrentArticle,
+  updateArticle,
+} from "store/articlesSlice";
+import { useNavigate, useParams } from "react-router-dom";
 import { Select, Space } from "antd";
 import type { SelectProps } from "antd";
 
 export const Editor = () => {
+  const { slug } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { tags } = useAppSelector((store) => store.tagsReducer);
+  const { currentArticle } = useAppSelector((store) => store.articlesReducer);
+  const [listTags, setListTags] = useState<string[]>([]);
+
+  const defaultTags =
+    currentArticle.slug === slug ? currentArticle.tagList : [];
 
   // Effects
   useEffect(() => {
@@ -41,14 +51,26 @@ export const Editor = () => {
   };
 
   const onSubmit = (values: NewArticle) => {
-    const newArticle: NewArticle = values;
-    dispatch(createArticle(newArticle))
-      .then((data) => {
-        navigate(`/article/${data.payload.slug}`);
-      })
-      .catch(() => {
-        alert("Try again!");
-      });
+    const article: NewArticle = values;
+    if (slug) {
+      dispatch(updateArticle({ slug, article }))
+        .then((data: any) => {
+          navigate(`/article/${data.payload.slug}`);
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("Try again!");
+        });
+    } else {
+      dispatch(createArticle(article))
+        .then((data) => {
+          navigate(`/article/${data.payload.slug}`);
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("Try again!");
+        });
+    }
   };
 
   const validationSchema = Yup.object({
@@ -66,12 +88,29 @@ export const Editor = () => {
   const touched = formik.touched;
   const errors = formik.errors;
 
+  useEffect(() => {
+    if (slug && currentArticle.slug === slug) {
+      formik.setValues({
+        title: currentArticle.title,
+        description: currentArticle.description,
+        body: currentArticle.body,
+        tagList: currentArticle.tagList,
+      });
+      setListTags(currentArticle.tagList);
+    }
+    if (!currentArticle.slug || currentArticle.slug !== slug) {
+      slug && dispatch(getCurrentArticle(slug));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentArticle.slug]);
+
   // Events
   const uppercaseFirstChar = (string: string) => {
     return string[0].toUpperCase() + string.slice(1, string.length);
   };
 
-  const handleTagChange = (value: string | string[]) => {
+  const handleTagChange = (value: string[]) => {
+    setListTags(value);
     formik.setFieldValue("tagList", value);
   };
 
@@ -133,7 +172,8 @@ export const Editor = () => {
                 size="large"
                 mode="tags"
                 placeholder="Please select"
-                defaultValue={[]}
+                defaultValue={defaultTags}
+                value={listTags}
                 onChange={handleTagChange}
                 style={{ width: "100%" }}
                 options={options}

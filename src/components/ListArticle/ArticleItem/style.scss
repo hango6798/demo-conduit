@@ -12,7 +12,7 @@
         }
     }
     .title{
-        height: 48px;
+        max-height: 48px;
         &:hover{
             opacity: 0.8;
         }
@@ -24,11 +24,13 @@
         }
     }
     .desc{
-        height: 63px;
+        max-height: 63px;
     }
     .tag-list{
+        max-width: 100%;
         .list-group-item{
             margin-top: 0.25rem;
+            max-width: 100%;
         }
     }
 }

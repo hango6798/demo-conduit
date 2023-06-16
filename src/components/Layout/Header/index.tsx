@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useEffect, useMemo } from "react";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./style.scss";
@@ -12,11 +12,12 @@ import {
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { logout, setPopupType, setShowPopup } from "store/userSlice";
+import { fetchUser, logout, setPopupType, setShowPopup } from "store/userSlice";
 
 const Header = () => {
   const dispatch = useAppDispatch();
   const {
+    token,
     user,
     showPopup: show,
     status,
@@ -42,6 +43,12 @@ const Header = () => {
   const handleNavClick = () => {
     window.scrollTo(0, 0);
   };
+
+  useEffect(() => {
+    if (token && !user.username) {
+      dispatch(fetchUser());
+    }
+  }, [user.username, token, dispatch]);
 
   return (
     <div className="shadow-sm sticky-top" style={{ zIndex: 1030 }}>

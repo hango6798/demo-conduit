@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Author as AuthorType } from "models";
 import { Image } from "react-bootstrap";
+import { memo } from "react";
 
 interface Props {
   author: AuthorType;
@@ -8,7 +9,7 @@ interface Props {
   variant: "light" | "dark";
 }
 
-export const Author = ({ author, createdTime, variant }: Props) => {
+const Author = ({ author, createdTime, variant }: Props) => {
   const authorUrl = `/profiles/@${author.username}`;
   const dark = variant === "dark";
 
@@ -49,3 +50,5 @@ export const Author = ({ author, createdTime, variant }: Props) => {
     </div>
   );
 };
+
+export default memo(Author);

@@ -28,7 +28,7 @@ const articlesApi = {
             "article": newArticle,
         })
     },
-    updateArticle(slug:string, data: Article):Promise<any> {
+    updateArticle(slug:string, data: NewArticle):Promise<any> {
         const url = `articles/${slug}`
         return axiosClient.put(url, {
             "article": data,

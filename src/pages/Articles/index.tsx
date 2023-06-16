@@ -6,7 +6,7 @@ import {
   fetchGlobalArticles,
   setCurrentFavSlug,
 } from "store/articlesSlice";
-import { ParamsArticle } from "models";
+import { ParamsArticle, Tab } from "models";
 import { Pagination } from "components/Pagination";
 import { useNavigate } from "react-router-dom";
 import { ContentWrapper } from "components/Layout/ContentWrapper";
@@ -18,11 +18,6 @@ import "./style.scss";
 import { TagSelect } from "components/Tags/TagSelect";
 import { fetchTags, setCurrentTag } from "store/tagsSlice";
 
-enum TabName {
-  Feed = "feed",
-  // ...
-}
-
 export const Articles = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -32,31 +27,33 @@ export const Articles = () => {
   const { token } = useAppSelector((store) => store.userReducer);
   const { currentTag } = useAppSelector((store) => store.tagsReducer);
 
+  const uppercaseFirstChar = (string: string) => {
+    return string[0].toUpperCase() + string.slice(1);
+  };
+
   // tabs
   const listTabs = [
     {
-      name: TabName.Feed,
+      name: Tab.FEED,
       hide: !token,
       disabled: false,
-      content: "Feed",
+      content: uppercaseFirstChar(Tab.FEED),
     },
     {
-      name: "global",
+      name: Tab.GLOBAL,
       hide: false,
       disabled: false,
-      content: "Global",
+      content: uppercaseFirstChar(Tab.GLOBAL),
     },
     {
-      name: "tag",
+      name: Tab.TAG,
       hide: currentTag === "",
       disabled: true,
-      content: currentTag
-        ? `# ${currentTag[0].toUpperCase() + currentTag.slice(1)}`
-        : "",
+      content: currentTag ? `# ${uppercaseFirstChar(currentTag)}` : "",
     },
   ];
-  const defaultTab = token ? "feed" : "global";
-  const [currentTab, setCurrentTab] = useState<string>(defaultTab);
+  const defaultTab = token ? Tab.FEED : Tab.GLOBAL;
+  const [currentTab, setCurrentTab] = useState<Tab>(defaultTab);
   // pagination
   const limit = 10;
   const pagesCount = useMemo(() => {
@@ -80,11 +77,11 @@ export const Articles = () => {
         navigate(`/article/${currentFavSlug}`);
         dispatch(setCurrentFavSlug(null));
       } else {
-        setCurrentTab("feed");
+        setCurrentTab(Tab.FEED);
         setCurrentPage(1);
       }
     } else {
-      setCurrentTab("global");
+      setCurrentTab(Tab.GLOBAL);
       setCurrentPage(1);
     }
     dispatch(setCurrentTag(""));
@@ -99,9 +96,9 @@ export const Articles = () => {
           tag: currentTag,
         })
       );
-    } else if (currentTab === "global") {
+    } else if (currentTab === Tab.GLOBAL) {
       dispatch(fetchGlobalArticles(params));
-    } else if (token && currentTab === "feed") {
+    } else if (token && currentTab === Tab.FEED) {
       dispatch(fetchFeedArticles(params));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,7 +113,7 @@ export const Articles = () => {
     };
   }, [currentPage]);
 
-  const handleTabClick = (tab: string) => {
+  const handleTabClick = (tab: Tab) => {
     setCurrentTab(tab);
     dispatch(setCurrentTag(""));
     setCurrentPage(1);
@@ -125,7 +122,7 @@ export const Articles = () => {
   const handleTagClick = (tag: string) => {
     dispatch(setCurrentTag(tag));
     setCurrentPage(1);
-    setCurrentTab("tag");
+    setCurrentTab(Tab.TAG);
     window.scrollTo(0, 0);
   };
 
@@ -133,7 +130,7 @@ export const Articles = () => {
     dispatch(setCurrentTag(e.target.value));
     setCurrentPage(1);
     if (e.target.value !== "") {
-      setCurrentTab("tag");
+      setCurrentTab(Tab.TAG);
     }
   };
 

@@ -3,4 +3,9 @@
     list-style-type: none;
     padding: 0;
     margin: 0 -0.25rem;
+    max-width: 100%;
+    li{
+        max-width: 100%;
+        overflow-wrap: break-word;
+    }
 }

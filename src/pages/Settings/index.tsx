@@ -23,7 +23,7 @@ export const Settings = () => {
   const [imgUrlLoading, setImgUrlLoading] = useState<boolean>(false);
 
   // Formik
-  const defaultValues = {
+  const initialValues = {
     image: user.image,
     username: user.username,
     bio: user.bio,
@@ -31,19 +31,30 @@ export const Settings = () => {
     newPassword: "",
     confirmPassword: "",
   };
-  const initialValues = defaultValues;
   const onSubmit = (values: any) => {
     const newInfo = {
       image: imageUrl,
       username: values.username,
       bio: values.bio,
-      email: values.email.trim(),
+      email: values.email,
       password: values.newPassword,
     };
-    dispatch(updateUser(newInfo));
-    status.updateUser === "idle" && navigate(`/profiles/@${values.username}`);
-    status.updateUser === "failed" &&
-      alert("Something goes wrong, please reload website and try again!");
+    const compareValues = (obj1: any, obj2: any) => {
+      for (let key of Object.keys(obj1)) {
+        if (obj1[key] !== obj2[key]) {
+          return false;
+        }
+      }
+      return true;
+    };
+    if (!compareValues(values, initialValues)) {
+      dispatch(updateUser(newInfo));
+      status.updateUser === "idle" && navigate(`/profiles/@${values.username}`);
+      status.updateUser === "failed" &&
+        alert("Something goes wrong, please reload website and try again!");
+    } else {
+      navigate(`/profiles/@${values.username}`);
+    }
   };
   const validate = (values: any) => {
     const errors: any = {};
@@ -54,16 +65,16 @@ export const Settings = () => {
   };
   const validationSchema = Yup.object({
     image: Yup.string().required(),
-    username: Yup.string().required(),
+    username: Yup.string().required().trim(),
     bio: Yup.string().max(100),
-    email: Yup.string().email().required(),
+    email: Yup.string().email().required().trim(),
     newPassword: Yup.string()
+      .trim()
       .min(6, "Your password is too short!")
       .max(20, "Your password is too long!"),
-    confirmPassword: Yup.string().oneOf(
-      [Yup.ref("newPassword")],
-      "Your passwords do not match."
-    ),
+    confirmPassword: Yup.string()
+      .trim()
+      .oneOf([Yup.ref("newPassword")], "Your passwords do not match."),
   });
   const formik = useFormik({
     initialValues,
@@ -74,8 +85,8 @@ export const Settings = () => {
 
   useEffect(() => {
     setImageUrl(user.image);
-    formik.setValues(defaultValues);
-    // beslint-disable-next-line react-hooks/exhaustive-deps
+    formik.setValues(initialValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const errors = formik.errors;

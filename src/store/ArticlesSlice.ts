@@ -161,7 +161,7 @@ export const createArticle = createAsyncThunk(
 
 export const updateArticle = createAsyncThunk(
     'articles/updateArticle',
-    async (params: {slug:string, article: Article}, { rejectWithValue, fulfillWithValue}) => {
+    async (params: {slug:string, article: NewArticle}, { rejectWithValue, fulfillWithValue}) => {
         try {
             const response = await articlesApi.updateArticle(params.slug, params.article)
             const data = await response.data.article
@@ -195,6 +195,9 @@ export const articlesSlice = createSlice({
         },
         setCurrentArticle: (state: ArticleState, action: PayloadAction<Article>) => {
             state.currentArticle = action.payload
+        },
+        setCurrentArticleFollow: (state: ArticleState, action: PayloadAction<boolean>) => {
+            state.currentArticle.author.following = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -324,6 +327,6 @@ export const articlesSlice = createSlice({
     }
 });
 
-export const {setCurrentFavSlug, setCurrentArticle} = articlesSlice.actions
+export const {setCurrentFavSlug, setCurrentArticle, setCurrentArticleFollow} = articlesSlice.actions
 
 export default articlesSlice.reducer
