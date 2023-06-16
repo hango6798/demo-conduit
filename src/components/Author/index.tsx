@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { Author as AuthorType } from "../../models"
+import { Author as AuthorType } from "@models"
 import { Image } from "react-bootstrap"
 
 interface Props {

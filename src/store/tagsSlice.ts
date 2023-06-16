@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import tagsApi from '../api/tagsApi';
+import tagsApi from '@api/tagsApi';
 
 export interface TagsState {
     tags: string[];

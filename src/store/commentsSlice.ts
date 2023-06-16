@@ -1,8 +1,8 @@
 
 
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import commentApi from '../api/commentApi';
-import { Comment } from '../models';
+import commentApi from '@api/commentApi';
+import { Comment } from '@models';
 
 type Status = 'idle' | 'loading' | 'failed'
 

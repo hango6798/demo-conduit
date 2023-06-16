@@ -1,7 +1,7 @@
-import { NewArticle, ParamsArticle } from './../models/article';
+import { NewArticle, ParamsArticle } from '@models/article';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Article } from '../models';
-import articlesApi from '../api/articlesApi';
+import { Article } from '@models';
+import articlesApi from '@api/articlesApi';
 
 type Status = 'idle' | 'loading' | 'failed'
 
