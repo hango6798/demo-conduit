@@ -1,6 +1,5 @@
 import axios from "axios";
-import { store } from "@store";
-
+import { store } from "store/store";
 const axiosClient = axios.create({
     baseURL: "https://api.realworld.io/api",
     headers: {

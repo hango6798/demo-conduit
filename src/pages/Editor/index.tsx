@@ -1,13 +1,13 @@
 import { Button, Form } from "react-bootstrap";
-import { NewArticle } from "@models";
+import { NewArticle } from "models";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { ContentWrapper } from "@components/Layout/ContentWrapper";
+import { ContentWrapper } from "components/Layout/ContentWrapper";
 import "./style.scss";
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { fetchTags } from "@store/tagsSlice";
-import { createArticle } from "@store/articlesSlice";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { fetchTags } from "store/tagsSlice";
+import { createArticle } from "store/articlesSlice";
 import { useNavigate } from "react-router-dom";
 import { Select, Space } from "antd";
 import type { SelectProps } from "antd";

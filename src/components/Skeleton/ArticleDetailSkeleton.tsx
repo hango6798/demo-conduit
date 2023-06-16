@@ -1,7 +1,7 @@
 import Skeleton from "react-loading-skeleton";
-import "@pages/ArticleDetail/style.scss";
-import { ContentWrapper } from "@components/Layout/ContentWrapper";
-import { Heading } from "@components/Layout/Heading";
+import "pages/ArticleDetail/style.scss";
+import { ContentWrapper } from "components/Layout/ContentWrapper";
+import { Heading } from "components/Layout/Heading";
 import { AuthorSkeleton } from "./AuthorSkeleton";
 
 export const ArticleDetailSkeleton = () => {

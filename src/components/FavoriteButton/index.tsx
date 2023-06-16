@@ -1,15 +1,15 @@
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "react-bootstrap";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import {
   unfavorite,
   favorite,
   setCurrentFavSlug,
   setCurrentArticle,
-} from "@store/articlesSlice";
-import { setPopupType, setShowPopup } from "@store/userSlice";
-import { Article } from "@models";
+} from "store/articlesSlice";
+import { setPopupType, setShowPopup } from "store/userSlice";
+import { Article } from "models";
 import "./style.scss";
 
 interface Props {

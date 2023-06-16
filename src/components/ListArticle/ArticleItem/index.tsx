@@ -1,10 +1,10 @@
 import { ListGroup } from "react-bootstrap";
-import { Article } from "@models";
+import { Article } from "models";
 import { Link } from "react-router-dom";
 import "./style.scss";
-import { FavoriteButton } from "@components/FavoriteButton";
-import { Author } from "@components/Author";
-import { useAppSelector } from "@store/hooks";
+import { FavoriteButton } from "components/FavoriteButton";
+import { Author } from "components/Author";
+import { useAppSelector } from "store/hooks";
 
 interface Props {
   article: Article;

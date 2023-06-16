@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { fetchUser } from "@store/userSlice";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { fetchUser } from "store/userSlice";
 
 export const Layout = () => {
   const dispatch = useAppDispatch();

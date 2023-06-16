@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Login, NewUser, User } from '@models';
-import userApi from '@api/userApi';
+import { Login, NewUser, User } from 'models';
+import userApi from 'api/userApi';
 import storage from 'redux-persist/es/storage';
 import persistReducer from 'redux-persist/es/persistReducer';
 

@@ -2,17 +2,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Form, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import {
-  createComment,
-  deleteComment,
-  getComments,
-} from "@store/commentsSlice";
-import { Comment } from "@models";
+import { createComment, deleteComment, getComments } from "store/commentsSlice";
+import { Comment } from "models";
 import { faPaperPlane, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import "./style.scss";
-import { setPopupType, setShowPopup } from "@store/userSlice";
-import { Pagination } from "../Pagination";
+import { setPopupType, setShowPopup } from "store/userSlice";
+import { Pagination } from "components/Pagination";
 import Skeleton from "react-loading-skeleton";
 
 interface Props {

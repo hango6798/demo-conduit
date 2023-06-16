@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { setShowPopup } from "@store/userSlice";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { setShowPopup } from "store/userSlice";
 import { useEffect } from "react";
 
 interface Props {

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import Profile from '@models/profile';
-import profilesApi from '@api/profilesApi';
+import Profile from 'models/profile';
+import profilesApi from 'api/profilesApi';
 
 type Status = 'idle' | 'loading' | 'failed'
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppSelector } from "@store/hooks";
+import { useAppSelector } from "store/hooks";
 import { Form } from "react-bootstrap";
 
 interface Props {

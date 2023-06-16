@@ -1,5 +1,4 @@
-import { Article, NewArticle } from "@models"
-import { ParamsArticle } from "@models"
+import { ParamsArticle, NewArticle, Article } from "models"
 import axiosClient from "./axiosClient"
 
 const articlesApi = {

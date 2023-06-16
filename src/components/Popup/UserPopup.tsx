@@ -2,10 +2,10 @@ import "./style.scss";
 import { Button, Modal, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import * as Yup from "yup";
-import { Login, NewUser } from "@models";
+import { Login, NewUser } from "models";
 import { useFormik } from "formik";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { register, login, setShowPopup, setPopupType } from "@store/userSlice";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { register, login, setShowPopup, setPopupType } from "store/userSlice";
 import React, { useEffect } from "react";
 
 export const UserPopup = () => {

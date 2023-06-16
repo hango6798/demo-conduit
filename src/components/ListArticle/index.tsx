@@ -1,8 +1,8 @@
 import { ListGroup, Row, Col } from "react-bootstrap";
-import { Article } from "@models";
+import { Article } from "models";
 import { ArticleItem } from "./ArticleItem";
-import { ArticleSkeleton } from "@components/Skeleton/ArticleSkeleton";
-import { useAppSelector } from "@store/hooks";
+import { ArticleSkeleton } from "components/Skeleton/ArticleSkeleton";
+import { useAppSelector } from "store/hooks";
 
 interface Props {
   limit: number;

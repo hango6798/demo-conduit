@@ -1,7 +1,7 @@
 import { Button, Form, Image } from "react-bootstrap";
-import { ContentWrapper } from "@components/Layout/ContentWrapper";
+import { ContentWrapper } from "components/Layout/ContentWrapper";
 import "./style.scss";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import Skeleton from "react-loading-skeleton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
@@ -9,7 +9,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { updateUser } from "@store/userSlice";
+import { updateUser } from "store/userSlice";
 import { useNavigate } from "react-router-dom";
 
 export const Settings = () => {

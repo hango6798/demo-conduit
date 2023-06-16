@@ -1,11 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Layout } from "@components/Layout";
-import { RequiredAuth } from "@components/RequiredAuth";
-import { ArticleDetail } from "@pages/ArticleDetail";
-import { Editor } from "@pages/Editor";
-import { Profile } from "@pages/Profiles";
-import { Settings } from "@pages/Settings";
-import { Articles } from "@pages/Articles";
+import { Layout } from "components/Layout";
+import { RequiredAuth } from "components/RequiredAuth";
+import { ArticleDetail } from "pages/ArticleDetail";
+import { Articles } from "pages/Articles";
+import { Editor } from "pages/Editor";
+import { Profile } from "pages/Profiles";
+import { Settings } from "pages/Settings";
 
 export const router = createBrowserRouter([
   {

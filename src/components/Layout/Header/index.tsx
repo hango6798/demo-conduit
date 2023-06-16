@@ -2,8 +2,8 @@ import { memo, useMemo } from "react";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./style.scss";
-import { UserPopup } from "@components/Popup/UserPopup";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { UserPopup } from "components/Popup/UserPopup";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPenToSquare,
@@ -12,7 +12,7 @@ import {
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { logout, setPopupType, setShowPopup } from "@store/userSlice";
+import { logout, setPopupType, setShowPopup } from "store/userSlice";
 
 const Header = () => {
   const dispatch = useAppDispatch();

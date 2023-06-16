@@ -1,5 +1,5 @@
 import Skeleton from "react-loading-skeleton";
-import "@components/ListArticle/ArticleItem/style.scss";
+import "components/ListArticle/ArticleItem/style.scss";
 import { ListGroup } from "react-bootstrap";
 import { AuthorSkeleton } from "./AuthorSkeleton";
 

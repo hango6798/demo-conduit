@@ -1,19 +1,19 @@
 import { useParams } from "react-router-dom";
-import { Heading } from "@components/Layout/Heading";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { Heading } from "components/Layout/Heading";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import { useEffect } from "react";
-import { getCurrentArticle, setCurrentArticle } from "@store/articlesSlice";
-import { Author } from "@components/Author";
+import { getCurrentArticle, setCurrentArticle } from "store/articlesSlice";
+import { Author } from "components/Author";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FavoriteButton } from "@components/FavoriteButton";
-import { ContentWrapper } from "@components/Layout/ContentWrapper";
-import { unfollow, follow } from "@store/profilesSlice";
-import { setPopupType, setShowPopup } from "@store/userSlice";
+import { FavoriteButton } from "components/FavoriteButton";
+import { ContentWrapper } from "components/Layout/ContentWrapper";
+import { unfollow, follow } from "store/profilesSlice";
+import { setPopupType, setShowPopup } from "store/userSlice";
 import "./style.scss";
-import { ArticleDetailSkeleton } from "@components/Skeleton/ArticleDetailSkeleton";
-import { Comments } from "@components/Comments";
+import { ArticleDetailSkeleton } from "components/Skeleton/ArticleDetailSkeleton";
+import { Comments } from "components/Comments";
 
 export const ArticleDetail = () => {
   const { slug } = useParams();

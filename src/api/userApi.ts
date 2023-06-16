@@ -1,4 +1,4 @@
-import { Login, NewUser, User } from "@models"
+import { Login, NewUser, User } from "models"
 import axiosClient from "./axiosClient"
 
 const userApi = {

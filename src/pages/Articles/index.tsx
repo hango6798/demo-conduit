@@ -1,22 +1,22 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
 import {
   fetchFeedArticles,
   fetchGlobalArticles,
   setCurrentFavSlug,
-} from "@store/articlesSlice";
-import { ParamsArticle } from "@models";
-import { Pagination } from "@components/Pagination";
+} from "store/articlesSlice";
+import { ParamsArticle } from "models";
+import { Pagination } from "components/Pagination";
 import { useNavigate } from "react-router-dom";
-import { ContentWrapper } from "@components/Layout/ContentWrapper";
-import { Heading } from "@components/Layout/Heading";
-import { PopularTags } from "@components/Tags/PopularTags";
-import { Tabs } from "@components/Tabs";
-import { ListArticle } from "@components/ListArticle";
+import { ContentWrapper } from "components/Layout/ContentWrapper";
+import { Heading } from "components/Layout/Heading";
+import { PopularTags } from "components/Tags/PopularTags";
+import { Tabs } from "components/Tabs";
+import { ListArticle } from "components/ListArticle";
 import "./style.scss";
-import { TagSelect } from "@components/Tags/TagSelect";
-import { fetchTags, setCurrentTag } from "@store/tagsSlice";
+import { TagSelect } from "components/Tags/TagSelect";
+import { fetchTags, setCurrentTag } from "store/tagsSlice";
 
 enum TabName {
   Feed = "feed",
