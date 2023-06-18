@@ -1,25 +1,24 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Heading } from "components/Layout/Heading";
 import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { follow, getProfile, unfollow } from "store/profilesSlice";
-import { Button, Col, Image, Row } from "react-bootstrap";
+import { getProfile } from "store/profilesSlice";
+import { Col, Image, Row } from "react-bootstrap";
 import Skeleton from "react-loading-skeleton";
 import { ContentWrapper } from "components/Layout/ContentWrapper";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faGear, faMinus } from "@fortawesome/free-solid-svg-icons";
-import { setShowPopup } from "store/userSlice";
 import { Tabs } from "components/Tabs";
 import { Pagination } from "components/Pagination";
-import { ParamsArticle } from "models";
+import { ParamsArticle, Tab } from "models";
 import { ListArticle } from "components/ListArticle";
 import { fetchGlobalArticles } from "store/articlesSlice";
+import { FollowButton } from "components/FollowButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
 
 export const Profile = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const params = useParams();
-  const { token, user } = useAppSelector((store) => store.userReducer);
+  const { user } = useAppSelector((store) => store.userReducer);
   const { articlesCount } = useAppSelector((store) => store.articlesReducer);
   const { profile, status } = useAppSelector((store) => store.profilesReducer);
 
@@ -31,65 +30,30 @@ export const Profile = () => {
   const currentProfile: any = isUserProfile ? user : profile;
   const following = currentProfile.following;
 
-  // button follow / settings
-  const buttonDisabled = status.follow === "loading";
-
-  const buttonContent = useMemo(() => {
-    if (isUserProfile) {
-      return (
-        <>
-          <FontAwesomeIcon icon={faGear} className="me-2" />
-          Edit Profile Settings
-        </>
-      );
-    }
-    return (
-      <>
-        <FontAwesomeIcon icon={following ? faMinus : faPlus} className="me-2" />
-        {following ? "Unfollow" : "Follow"}
-      </>
-    );
-  }, [following, isUserProfile]);
-
   useEffect(() => {
     !isUserProfile && dispatch(getProfile(usernameParam));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [usernameParam]);
 
-  const goToSetting = () => {
-    navigate("/settings");
-  };
-
-  const handleFollow = () => {
-    if (token) {
-      currentProfile.following
-        ? dispatch(unfollow(usernameParam))
-        : dispatch(follow(usernameParam));
-    } else {
-      dispatch(setShowPopup(true));
-    }
-  };
-  const buttonClickEvent = isUserProfile ? goToSetting : handleFollow;
-
   // List Articles
 
   // tabs
-  const [currentTab, setCurrentTab] = useState<string>("myArticles");
+  const [currentTab, setCurrentTab] = useState<Tab>(Tab.MY_ARTICLES);
   const listTabs = [
     {
-      name: "myArticles",
+      name: Tab.MY_ARTICLES,
       hide: false,
       disabled: false,
       content: "My Articles",
     },
     {
-      name: "favorited",
+      name: Tab.FAVORITED,
       hide: false,
       disabled: false,
       content: "Favorited Articles",
     },
   ];
-  const handleTabClick = (tab: string) => {
+  const handleTabChange = (tab: Tab) => {
     setCurrentTab(tab);
     setCurrentPage(1);
   };
@@ -105,7 +69,7 @@ export const Profile = () => {
   };
 
   useEffect(() => {
-    setCurrentTab("myArticles");
+    setCurrentTab(Tab.MY_ARTICLES);
     setCurrentPage(1);
   }, [usernameParam]);
 
@@ -114,14 +78,14 @@ export const Profile = () => {
   }, [currentTab]);
 
   useEffect(() => {
-    if (currentTab === "myArticles") {
+    if (currentTab === Tab.MY_ARTICLES) {
       dispatch(
         fetchGlobalArticles({
           ...articleParams,
           author: usernameParam,
         })
       );
-    } else if (currentTab === "favorited") {
+    } else if (currentTab === Tab.FAVORITED) {
       dispatch(
         fetchGlobalArticles({
           ...articleParams,
@@ -156,15 +120,18 @@ export const Profile = () => {
               width={100}
               height={100}
             />
-            <p className="h3 m-0">{currentProfile.username}</p>
-            <Button
-              variant={following ? "light" : "outline-light"}
-              className="fw-bold mt-3"
-              onClick={buttonClickEvent}
-              disabled={buttonDisabled}
-            >
-              {buttonContent}
-            </Button>
+            <p className="h3 m-0 mb-2">{currentProfile.username}</p>
+            {isUserProfile ? (
+              <Link className="btn btn-outline-light fw-medium" to="/settings">
+                <FontAwesomeIcon icon={faGear} className="me-2" />
+                Edit profile settings
+              </Link>
+            ) : (
+              <FollowButton
+                following={following}
+                username={currentProfile.username}
+              />
+            )}
           </>
         )}
       </Heading>
@@ -182,7 +149,7 @@ export const Profile = () => {
           <Col xs={12}>
             <Tabs
               listTabs={listTabs}
-              handleTabClick={handleTabClick}
+              handleTabChange={handleTabChange}
               currentTab={currentTab}
             />
           </Col>

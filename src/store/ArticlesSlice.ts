@@ -10,7 +10,6 @@ export interface ArticleState {
     status: {
         articles: Status;
         currentArticle: Status;
-        favorite: Status;
     };
     articlesCount: number;
     currentFavSlug: string | null;
@@ -22,7 +21,6 @@ const initialState:ArticleState = {
     status: {
         articles: 'idle',
         currentArticle: 'idle',
-        favorite: 'idle'
     },
     articlesCount: 0,
     currentFavSlug: null,
@@ -66,68 +64,6 @@ export const fetchFeedArticles = createAsyncThunk(
             return fulfillWithValue(data)
         } catch (error:any) {
             throw rejectWithValue(error.response.data.errors)
-        }
-    }
-)
-
-export const favorite = createAsyncThunk(
-    'articles/favorite',
-    async (slug:string, { dispatch, getState, rejectWithValue, fulfillWithValue}) => {
-        const { articlesReducer }:any = getState()
-        const {articles, currentArticle} = articlesReducer
-        const id = articles.findIndex((article: Article) => article.slug === slug)
-        try {
-            if(currentArticle.slug){
-                dispatch(setCurrentArticle({
-                    ...currentArticle,
-                    favorited: true,
-                    favoritesCount: currentArticle.favoritesCount + 1
-                }))
-            }
-            const response = await articlesApi.favorite(slug)
-            const data = await response.data.article
-            return fulfillWithValue({data, id})
-        } catch (error:any) {
-            if(currentArticle.slug){
-                dispatch(setCurrentArticle({
-                    ...currentArticle,
-                    favorited: false,
-                    favoritesCount: currentArticle.favoritesCount - 1
-                }))
-            }
-            const err = error.response.data.errors
-            throw rejectWithValue({err, id})
-        }
-    },
-)
-
-export const unfavorite = createAsyncThunk(
-    'articles/unfavorite',
-    async (slug:string, { dispatch, getState, rejectWithValue, fulfillWithValue}) => {
-        const { articlesReducer }:any = getState()
-        const {articles, currentArticle} = articlesReducer
-        const id = articles.findIndex((article: Article) => article.slug === slug)
-        try {
-            if(currentArticle.slug){
-                dispatch(setCurrentArticle({
-                    ...currentArticle,
-                    favorited: false,
-                    favoritesCount: currentArticle.favoritesCount - 1
-                }))
-            }
-            const response = await articlesApi.unfavorite(slug)
-            const data = await response.data.article
-            return fulfillWithValue({data, id})
-        } catch (error:any) {
-            if(currentArticle.slug){
-                dispatch(setCurrentArticle({
-                    ...currentArticle,
-                    favorited: true,
-                    favoritesCount: currentArticle.favoritesCount + 1
-                }))
-            }
-            const err = error.response.data.errors
-            throw rejectWithValue({err, id})
         }
     }
 )
@@ -196,9 +132,6 @@ export const articlesSlice = createSlice({
         setCurrentArticle: (state: ArticleState, action: PayloadAction<Article>) => {
             state.currentArticle = action.payload
         },
-        setCurrentArticleFollow: (state: ArticleState, action: PayloadAction<boolean>) => {
-            state.currentArticle.author.following = action.payload
-        }
     },
     extraReducers: (builder) => {
         // Fetch Global Articles
@@ -224,62 +157,6 @@ export const articlesSlice = createSlice({
         })
         builder.addCase(fetchFeedArticles.rejected, (state:ArticleState, action: PayloadAction<any>) => {
             state.status.articles = "failed"
-        })
-        // Favorite
-        builder.addCase(favorite.pending, (state:ArticleState, {meta}) => {
-            state.status.favorite = "loading"
-            if(!!state.articles.length){
-                const id = state.articles.findIndex((article: Article) => article.slug === meta.arg)
-                state.articles[id].favorited = true
-                state.articles[id].favoritesCount += 1
-            }
-        })
-        builder.addCase(favorite.fulfilled, (state:ArticleState, action: PayloadAction<any>) => {
-            state.status.favorite = "idle"
-            if(!!state.articles.length){
-                const id = action.payload.id
-                const article = action.payload.data
-                if(id !== -1) {
-                    state.articles[id].favorited = article.favorited
-                    state.articles[id].favoritesCount = article.favoritesCount
-                }
-            }
-        })
-        builder.addCase(favorite.rejected, (state:ArticleState, action: PayloadAction<any>) => {
-            if(!!state.articles.length){
-                const id = action.payload.id
-                state.status.favorite = "failed"
-                state.articles[id].favorited = false
-                state.articles[id].favoritesCount -= 1
-            }
-        })
-        // Unfavorite
-        builder.addCase(unfavorite.pending, (state:ArticleState, {meta}) => {
-            state.status.favorite = "loading"
-            if(!!state.articles.length){
-                const id = state.articles.findIndex((article: Article) => article.slug === meta.arg)
-                state.articles[id].favorited = false
-                state.articles[id].favoritesCount -= 1
-            }
-        })
-        builder.addCase(unfavorite.fulfilled, (state:ArticleState, action: PayloadAction<any>) => {
-            state.status.favorite = "idle"
-            if(!!state.articles.length){
-                const id = action.payload.id
-                const article = action.payload.data
-                if(id !== -1) {
-                    state.articles[id].favorited = article.favorited
-                    state.articles[id].favoritesCount = article.favoritesCount
-                }
-            }
-        })
-        builder.addCase(unfavorite.rejected, (state:ArticleState, action: PayloadAction<any>) => {
-            if(!!state.articles.length){
-                const id = action.payload.id
-                state.status.favorite = "failed"
-                state.articles[id].favorited = true
-                state.articles[id].favoritesCount += 1
-            }
         })
         // Get Current Article
         builder.addCase(getCurrentArticle.pending, (state:ArticleState) => {
@@ -327,6 +204,6 @@ export const articlesSlice = createSlice({
     }
 });
 
-export const {setCurrentFavSlug, setCurrentArticle, setCurrentArticleFollow} = articlesSlice.actions
+export const {setCurrentFavSlug, setCurrentArticle} = articlesSlice.actions
 
 export default articlesSlice.reducer

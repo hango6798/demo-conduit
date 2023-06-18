@@ -13,13 +13,9 @@ const Author = ({ author, createdTime, variant }: Props) => {
   const authorUrl = `/profiles/@${author.username}`;
   const dark = variant === "dark";
 
-  const handleAuthorClick = () => {
-    window.scrollTo(0, 0);
-  };
-
   return (
     <div className="d-flex align-items-center">
-      <Link to={authorUrl} className="me-2" onClick={handleAuthorClick}>
+      <Link to={authorUrl} className="me-2">
         <Image
           src={author.image}
           alt=""
@@ -35,7 +31,6 @@ const Author = ({ author, createdTime, variant }: Props) => {
           className={`${
             dark ? "text-white" : "text-dark"
           } fw-medium authorName`}
-          onClick={handleAuthorClick}
         >
           {author.username}
         </Link>

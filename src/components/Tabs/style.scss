@@ -1,12 +1,13 @@
-
-.tabs{
+.tabs {
     flex-wrap: nowrap;
     margin: 0 -5px;
     overflow: hidden;
-    .nav-item{
+
+    .nav-item {
         width: 100%;
         margin: 0 5px;
-        .nav-link{
+
+        .nav-link {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -15,12 +16,14 @@
         }
     }
 }
+
 @media screen and (max-width: 600px) {
-    .tabs{
-        .nav-item{
+    .tabs {
+        .nav-item {
             width: auto;
-            .nav-link{
-                padding: 0.5rem!important;
+
+            .nav-link {
+                padding: 0.5rem !important;
             }
         }
     }

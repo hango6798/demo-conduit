@@ -5,7 +5,7 @@ import { Button, Form, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { createComment } from "store/commentsSlice";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { setPopupType, setShowPopup } from "store/userSlice";
+import { setShowPopup, Popup } from "store/userSlice";
 import "./style.scss";
 
 interface Props {
@@ -56,8 +56,10 @@ const CommentForm = ({ slug, setCurrentPage }: Props) => {
   };
 
   const handleSignInClick = () => {
-    dispatch(setPopupType("login"));
-    dispatch(setShowPopup(true));
+    dispatch(setShowPopup({
+      name: Popup.LOGIN,
+      open: true,
+    }));
   };
 
   if (token) {

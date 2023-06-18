@@ -12,7 +12,7 @@ import {
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { fetchUser, logout, setPopupType, setShowPopup } from "store/userSlice";
+import { fetchUser, logout, Popup, setShowPopup } from "store/userSlice";
 
 const Header = () => {
   const dispatch = useAppDispatch();
@@ -30,18 +30,18 @@ const Header = () => {
       : user.username;
   }, [user.username]);
 
-  const showPopup = (type: "login" | "register") => {
-    dispatch(setShowPopup(true));
-    dispatch(setPopupType(type));
+  const showPopup = (name: Popup) => {
+    dispatch(
+      setShowPopup({
+        name,
+        open: true,
+      })
+    );
   };
 
   const handleLogout = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     dispatch(logout());
-  };
-
-  const handleNavClick = () => {
-    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
@@ -86,26 +86,17 @@ const Header = () => {
                 id="collasible-nav-dropdown"
                 className="ms-auto"
               >
-                <Link
-                  className="dropdown-item"
-                  to="/editor"
-                  onClick={handleNavClick}
-                >
+                <Link className="dropdown-item" to="/editor">
                   <FontAwesomeIcon icon={faPenToSquare} className="me-2" />
                   New Article
                 </Link>
-                <Link
-                  className="dropdown-item"
-                  to="/settings"
-                  onClick={handleNavClick}
-                >
+                <Link className="dropdown-item" to="/settings">
                   <FontAwesomeIcon icon={faGear} className="me-2" />
                   Settings
                 </Link>
                 <Link
                   className="dropdown-item"
                   to={`/profiles/@${user.username}`}
-                  onClick={handleNavClick}
                 >
                   <FontAwesomeIcon icon={faUser} className="me-2" />
                   Profile
@@ -125,7 +116,7 @@ const Header = () => {
                   to=""
                   onClick={(e) => {
                     e.preventDefault();
-                    showPopup("login");
+                    showPopup(Popup.LOGIN);
                   }}
                 >
                   Sign in
@@ -134,7 +125,7 @@ const Header = () => {
                   to=""
                   onClick={(e) => {
                     e.preventDefault();
-                    showPopup("register");
+                    showPopup(Popup.REGISTER);
                   }}
                 >
                   Sign Up
@@ -144,7 +135,7 @@ const Header = () => {
           </Navbar>
         </Container>
       </Navbar>
-      {show && <UserPopup />}
+      {show.open && <UserPopup />}
     </div>
   );
 };

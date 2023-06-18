@@ -1,14 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useMemo, useRef } from "react";
+import { memo, useEffect, useMemo, useRef } from "react";
 import { Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { deleteComment, getComments } from "store/commentsSlice";
+import { deleteComment } from "store/commentsSlice";
 import { Comment } from "models";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { Pagination } from "components/Pagination";
 import Skeleton from "react-loading-skeleton";
 import "./style.scss";
+import { Popconfirm } from "antd";
 
 interface Props {
   slug: string;
@@ -16,7 +17,7 @@ interface Props {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const ListComments = ({ slug, currentPage, setCurrentPage }: Props) => {
+const ListComments = ({ slug, currentPage, setCurrentPage }: Props) => {
   const dispatch = useAppDispatch();
 
   const { user } = useAppSelector((store) => store.userReducer);
@@ -29,11 +30,6 @@ export const ListComments = ({ slug, currentPage, setCurrentPage }: Props) => {
 
   // refs
   const commentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    !!slug && dispatch(getComments(slug));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug]);
 
   const sortedComment = useMemo(() => {
     if (!!comments.length) {
@@ -53,19 +49,20 @@ export const ListComments = ({ slug, currentPage, setCurrentPage }: Props) => {
   const idOfLastComment = limit * currentPage;
   const idOfFirstComment = idOfLastComment - limit;
 
-  const currentComment = sortedComment.slice(idOfFirstComment, idOfLastComment);
+  const currentComments = sortedComment.slice(
+    idOfFirstComment,
+    idOfLastComment
+  );
 
-  // useEffect(() => {
-  //     if(commentRef.current){
-  //         const commentEl = commentRef.current
-  //         const top = commentEl.offsetTop
-  //         window.scrollTo({top})
-  //     }
-  // }, [currentPage])
+  useEffect(() => {
+    if (currentComments.length === 0 && currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }, [currentComments, currentPage, setCurrentPage]);
 
   // Comment events
 
-  const handleDeleteComment = (commentId: number) => {
+  const confirmDelete = (commentId: number) => {
     dispatch(deleteComment({ slug, commentId }));
   };
 
@@ -93,7 +90,7 @@ export const ListComments = ({ slug, currentPage, setCurrentPage }: Props) => {
         </div>
       )}
       {/* List comments */}
-      {currentComment.map((comment: Comment) => {
+      {currentComments.map((comment: Comment) => {
         return (
           <div
             key={comment.id}
@@ -123,12 +120,20 @@ export const ListComments = ({ slug, currentPage, setCurrentPage }: Props) => {
                     {getCreatedTime(comment.createdAt)}
                   </span>
                 </div>
+                {/* Modal */}
                 {user.username === comment.author.username && (
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    className="text-secondary btn-delete"
-                    onClick={() => handleDeleteComment(comment.id)}
-                  />
+                  <Popconfirm
+                    title="Delete comment"
+                    description="Are you sure to delete this comment?"
+                    onConfirm={() => confirmDelete(comment.id)}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      className="text-secondary btn-delete"
+                    />
+                  </Popconfirm>
                 )}
               </div>
               <div>{comment.body}</div>
@@ -147,3 +152,5 @@ export const ListComments = ({ slug, currentPage, setCurrentPage }: Props) => {
     </div>
   );
 };
+
+export default memo(ListComments);

@@ -5,6 +5,10 @@ import storage from 'redux-persist/es/storage';
 import persistReducer from 'redux-persist/es/persistReducer';
 
 type Status = 'idle' | 'loading' | 'failed'
+export enum Popup {
+    LOGIN = 'login',
+    REGISTER = 'register',
+}
 
 export interface UserState {
   user: User;
@@ -21,8 +25,10 @@ export interface UserState {
     updateUser: string | null,
   };
   token: string | undefined;
-  showPopup: boolean;
-  popupType: 'login' | 'register';
+  showPopup: {
+    name: Popup,
+    open: boolean,
+  };
 }
 
 const initialState:UserState = {
@@ -46,8 +52,10 @@ const initialState:UserState = {
     updateUser: null,
   },
   token: undefined,
-  showPopup: false,
-  popupType: 'login',
+  showPopup: {
+    name: Popup.LOGIN,
+    open: false,
+  },
 };
 
 export const fetchUser = createAsyncThunk(
@@ -99,7 +107,7 @@ export const updateUser = createAsyncThunk(
             const data = await response.data.user
             return fulfillWithValue(data)
         } catch (error:any) {
-            throw rejectWithValue(error.response.data.errors)
+            throw rejectWithValue(error.response.data)
         }
     }
 )
@@ -114,11 +122,8 @@ export const userSlice = createSlice({
             state.token = undefined
             state.status = initialState.status
         },
-        setShowPopup: (state: UserState, action:PayloadAction<boolean>) => {
+        setShowPopup: (state: UserState, action:PayloadAction<{name: Popup,open: boolean,}>) => {
             state.showPopup = action.payload
-        },
-        setPopupType: (state: UserState, action:PayloadAction<'login' | 'register'>) => {
-            state.popupType = action.payload
         },
     },
     extraReducers: (builder) => {
@@ -188,17 +193,12 @@ export const userSlice = createSlice({
         })
         builder.addCase(updateUser.rejected, (state:UserState, action: PayloadAction<any>) => {
             state.status.updateUser = "failed"
-            const listError = []
-            for(let key of Object.keys(action.payload)){
-                const message = key[0].toUpperCase() + key.slice(1) + ' ' + action.payload[key]
-                listError.push(message)
-            }
-            state.error.updateUser = listError[listError.length - 1]
+            state.error.updateUser = action.payload
         })
     }
 });
 
-export const { logout, setShowPopup, setPopupType } = userSlice.actions;
+export const { logout, setShowPopup } = userSlice.actions;
 
 const persistConfig = {
     key: 'token',

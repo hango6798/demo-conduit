@@ -52,7 +52,7 @@ export const Articles = () => {
       content: currentTag ? `# ${uppercaseFirstChar(currentTag)}` : "",
     },
   ];
-  const defaultTab = token ? Tab.FEED : Tab.GLOBAL;
+  const defaultTab: Tab = token ? Tab.FEED : Tab.GLOBAL;
   const [currentTab, setCurrentTab] = useState<Tab>(defaultTab);
   // pagination
   const limit = 10;
@@ -113,7 +113,7 @@ export const Articles = () => {
     };
   }, [currentPage]);
 
-  const handleTabClick = (tab: Tab) => {
+  const handleTabChange = (tab: Tab) => {
     setCurrentTab(tab);
     dispatch(setCurrentTag(""));
     setCurrentPage(1);
@@ -155,7 +155,7 @@ export const Articles = () => {
           <Col xs={12} md={9}>
             <Tabs
               listTabs={listTabs}
-              handleTabClick={handleTabClick}
+              handleTabChange={handleTabChange}
               currentTab={currentTab}
             />
             <div className="tag-select mb-4">

@@ -2,33 +2,24 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Heading } from "components/Layout/Heading";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { useEffect, useState } from "react";
-import {
-  deleteArticle,
-  getCurrentArticle,
-  setCurrentArticleFollow,
-} from "store/articlesSlice";
+import { deleteArticle, getCurrentArticle } from "store/articlesSlice";
 import Author from "components/Author";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEdit,
-  faMinus,
-  faPlus,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FavoriteButton } from "components/FavoriteButton";
 import { ContentWrapper } from "components/Layout/ContentWrapper";
-import { unfollow, follow } from "store/profilesSlice";
-import { setPopupType, setShowPopup } from "store/userSlice";
 import "./style.scss";
-import { ArticleDetailSkeleton } from "components/Skeleton/ArticleDetailSkeleton";
+import { ArticleDetailSkeleton } from "pages/ArticleDetail/ArticleDetailSkeleton";
 import CommentForm from "components/Comments/CommentForm";
-import { ListComments } from "components/Comments/ListComments";
+import ListComments from "components/Comments/ListComments";
+import { FollowButton } from "components/FollowButton";
+import { ConfirmDelete } from "components/Popup/ConfirmDelete";
+import { getComments } from "store/commentsSlice";
 
 export const ArticleDetail = () => {
   const navigate = useNavigate();
   const { slug } = useParams();
-  const parser = new DOMParser();
   const dispatch = useAppDispatch();
 
   // get global state from store
@@ -37,59 +28,36 @@ export const ArticleDetail = () => {
   const { currentArticle, status: articleStatus } = useAppSelector(
     (store) => store.articlesReducer
   );
-  const { status: profileStatus } = useAppSelector(
-    (store) => store.profilesReducer
-  );
-  const { token } = useAppSelector((store) => store.userReducer);
 
   const createdTime = new Date(currentArticle.createdAt).toLocaleString(
     "en-us",
     { month: "long", day: "numeric", year: "numeric" }
   );
-  const articleBodyHTML = parser.parseFromString(
-    currentArticle.body.replaceAll("\\n", "<br />"),
-    "text/html"
-  ).body;
 
   const author = currentArticle.author;
   const isUserPost = user.username === author.username;
 
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [showConfirmDelete, setShowConfirmDelete] = useState<boolean>(false);
 
   useEffect(() => {
-    !!slug && dispatch(getCurrentArticle(slug));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleFollow = () => {
-    const username = author.username;
-    if (token) {
-      const setFollowing = (state: boolean) => {
-        dispatch(setCurrentArticleFollow(state));
-        dispatch(state ? follow(username) : unfollow(username)).catch((err) => {
-          dispatch(setCurrentArticleFollow(state));
-        });
-      };
-      author.following ? setFollowing(false) : setFollowing(true);
-    } else {
-      dispatch(setPopupType("login"));
-      dispatch(setShowPopup(true));
+    if (slug) {
+      dispatch(getCurrentArticle(slug));
+      dispatch(getComments(slug));
     }
-  };
+  }, [dispatch, slug]);
 
   const handleDeleteArticle = () => {
-    // eslint-disable-next-line no-restricted-globals
-    if (confirm("Delete this article?")) {
-      !!slug &&
-        dispatch(deleteArticle(slug))
-          .then(() => {
-            navigate("/");
-          })
-          .catch((error) => {
-            console.log(error);
-            alert("Try again!");
-          });
-    }
+    !!slug &&
+      dispatch(deleteArticle(slug))
+        .then(() => {
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("Try again!");
+        });
+    setShowConfirmDelete(false);
   };
 
   if (articleStatus.currentArticle === "failed") {
@@ -121,30 +89,23 @@ export const ArticleDetail = () => {
                   <FontAwesomeIcon icon={faEdit} className="me-2" />
                   Edit article
                 </Link>
-                <Button variant="outline-danger" onClick={handleDeleteArticle}>
+                <Button
+                  variant="outline-danger"
+                  onClick={() => setShowConfirmDelete(true)}
+                >
                   <FontAwesomeIcon icon={faTrash} className="me-2" />
                   Delete article
                 </Button>
               </div>
             ) : (
               <div className="d-flex align-items-center">
-                <Button
-                  variant={author.following ? "light" : "outline-light"}
-                  className="me-2 fw-bold"
+                <FollowButton
+                  following={author.following}
+                  username={author.username}
                   size="sm"
-                  onClick={handleFollow}
-                  disabled={profileStatus.follow === "loading"}
-                >
-                  <FontAwesomeIcon
-                    icon={author.following ? faMinus : faPlus}
-                    className="me-2"
-                  />
-                  {author.following ? "Unfollow" : "Follow"}
-                </Button>
-                <FavoriteButton
-                  article={currentArticle}
-                  variant="outline-primary"
+                  className="me-2"
                 />
+                <FavoriteButton article={currentArticle} size="sm" />
               </div>
             )}
           </div>
@@ -153,9 +114,7 @@ export const ArticleDetail = () => {
       <ContentWrapper>
         {/* Article Body */}
         <div className="my-4">
-          <div
-            dangerouslySetInnerHTML={{ __html: articleBodyHTML.innerHTML }}
-          ></div>
+          <div>{currentArticle.body}</div>
         </div>
         <ul className="tags d-flex flex-wrap">
           {currentArticle.tagList &&
@@ -184,30 +143,24 @@ export const ArticleDetail = () => {
                 <FontAwesomeIcon icon={faEdit} className="me-2" />
                 Edit article
               </Link>
-              <Button variant="outline-danger" onClick={handleDeleteArticle}>
+              <Button
+                variant="outline-danger"
+                onClick={() => setShowConfirmDelete(true)}
+              >
                 <FontAwesomeIcon icon={faTrash} className="me-2" />
                 Delete article
               </Button>
             </div>
           ) : (
             <div className="d-flex align-items-center">
-              <Button
-                variant={author.following ? "success" : "outline-success"}
-                className="me-2 fw-bold"
+              <FollowButton
+                following={author.following}
+                username={author.username}
                 size="sm"
-                onClick={handleFollow}
-                disabled={profileStatus.follow === "loading"}
-              >
-                <FontAwesomeIcon
-                  icon={author.following ? faMinus : faPlus}
-                  className="me-2"
-                />
-                {author.following ? "Unfollow" : "Follow"}
-              </Button>
-              <FavoriteButton
-                article={currentArticle}
-                variant="outline-primary"
+                className="me-2"
+                variant="success"
               />
+              <FavoriteButton article={currentArticle} size="sm" />
             </div>
           )}
         </div>
@@ -223,6 +176,12 @@ export const ArticleDetail = () => {
           )}
         </div>
       </ContentWrapper>
+      <ConfirmDelete
+        onConfirm={handleDeleteArticle}
+        show={showConfirmDelete}
+        setShow={setShowConfirmDelete}
+        message="Are you sure you want to delete this article?"
+      />
     </div>
   );
 };

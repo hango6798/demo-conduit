@@ -19,7 +19,6 @@ export const Settings = () => {
   const { user, status } = useAppSelector((store) => store.userReducer);
   const disabled = status.updateUser === "loading";
 
-  const [imageUrl, setImageUrl] = useState<string>(user.image);
   const [imgUrlLoading, setImgUrlLoading] = useState<boolean>(false);
 
   // Formik
@@ -33,7 +32,7 @@ export const Settings = () => {
   };
   const onSubmit = (values: any) => {
     const newInfo = {
-      image: imageUrl,
+      image: values.image,
       username: values.username,
       bio: values.bio,
       email: values.email,
@@ -48,10 +47,14 @@ export const Settings = () => {
       return true;
     };
     if (!compareValues(values, initialValues)) {
-      dispatch(updateUser(newInfo));
-      status.updateUser === "idle" && navigate(`/profiles/@${values.username}`);
-      status.updateUser === "failed" &&
-        alert("Something goes wrong, please reload website and try again!");
+      dispatch(updateUser(newInfo)).then((res) => {
+        const reqStatus = res.meta.requestStatus;
+        if (reqStatus === "fulfilled") {
+          navigate(`/profiles/@${values.username}`);
+        } else if (reqStatus === "rejected") {
+          alert("Something goes wrong, please reload website and try again!");
+        }
+      });
     } else {
       navigate(`/profiles/@${values.username}`);
     }
@@ -84,7 +87,6 @@ export const Settings = () => {
   });
 
   useEffect(() => {
-    setImageUrl(user.image);
     formik.setValues(initialValues);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -112,7 +114,7 @@ export const Settings = () => {
             payload
           )
           .then((res) => {
-            setImageUrl(res.data.data.image.url);
+            formik.setFieldValue("image", res.data.data.image.url);
           })
           .catch((error) => {
             console.log(error);
@@ -143,9 +145,9 @@ export const Settings = () => {
                 imgUrlLoading && "disabled"
               }`}
             >
-              {imageUrl ? (
+              {formik.values.image ? (
                 <div className="position-relative image">
-                  <Image src={imageUrl} width="100%" height="100%" />
+                  <Image src={formik.values.image} width="100%" height="100%" />
                   <FontAwesomeIcon icon={faCamera} />
                 </div>
               ) : (

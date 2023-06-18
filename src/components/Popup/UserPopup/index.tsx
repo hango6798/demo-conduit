@@ -5,24 +5,35 @@ import * as Yup from "yup";
 import { Login, NewUser } from "models";
 import { useFormik } from "formik";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { register, login, setShowPopup, setPopupType } from "store/userSlice";
+import { register, login, setShowPopup, Popup } from "store/userSlice";
 import React, { useEffect } from "react";
 
 export const UserPopup = () => {
   const dispatch = useAppDispatch();
-  const { error, token, status, popupType } = useAppSelector(
+  const { error, token, status, showPopup } = useAppSelector(
     (store) => store.userReducer
   );
-
-  const handleClose = () => dispatch(setShowPopup(false));
-  const isRegister = popupType === "register";
+  const isRegister = showPopup.name === Popup.REGISTER;
+  const popupName = isRegister ? Popup.REGISTER : Popup.LOGIN;
+  const handleClose = () =>
+    dispatch(
+      setShowPopup({
+        name: popupName,
+        open: false,
+      })
+    );
 
   const title = isRegister ? "Sign up" : "Sign in";
   const linkText = isRegister ? "Have an account?" : "Need an account?";
 
   const changePopupType = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    dispatch(setPopupType(isRegister ? "login" : "register"));
+    dispatch(
+      setShowPopup({
+        name: isRegister ? Popup.LOGIN : Popup.REGISTER,
+        open: true,
+      })
+    );
   };
 
   const disabled = isRegister
@@ -83,7 +94,13 @@ export const UserPopup = () => {
   const loginTouched = formikLogin.touched;
 
   useEffect(() => {
-    !!token && dispatch(setShowPopup(false));
+    !!token &&
+      dispatch(
+        setShowPopup({
+          name: popupName,
+          open: false,
+        })
+      );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 

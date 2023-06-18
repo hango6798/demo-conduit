@@ -4,17 +4,17 @@ import { Tab } from "models";
 
 interface Props {
   listTabs: {
-    name: string;
+    name: Tab;
     hide: boolean;
     disabled: boolean;
     content: string;
   }[];
-  handleTabClick: (tab: Tab) => void;
+  handleTabChange: (tab: Tab) => void;
   currentTab: Tab;
 }
 
-export const Tabs = ({ listTabs, handleTabClick, currentTab }: Props) => {
-  const setActive = (tab: Tab) => {
+export const Tabs = ({ listTabs, handleTabChange, currentTab }: Props) => {
+  const setActive = (tab: string) => {
     return tab === currentTab;
   };
   return (
@@ -24,7 +24,7 @@ export const Tabs = ({ listTabs, handleTabClick, currentTab }: Props) => {
           <Nav.Item key={tab.name} hidden={tab.hide}>
             <Nav.Link
               disabled={tab.disabled}
-              onClick={() => handleTabClick(tab.name)}
+              onClick={() => handleTabChange(tab.name)}
               active={setActive(tab.name)}
             >
               {tab.content}
