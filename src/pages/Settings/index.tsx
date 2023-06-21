@@ -23,10 +23,10 @@ export const Settings = () => {
 
   // Formik
   const initialValues = {
-    image: user.image,
-    username: user.username,
-    bio: user.bio,
-    email: user.email,
+    image: user ? user.image : "",
+    username: user ? user.username : "",
+    bio: user ? user.bio : "",
+    email: user ? user.email : "",
     newPassword: "",
     confirmPassword: "",
   };
@@ -142,7 +142,7 @@ export const Settings = () => {
           <Form.Label className="text-center" controlid="uploadAvatar">
             <div
               className={`avatar border border-secondary border-3 rounded ${
-                imgUrlLoading && "disabled"
+                (imgUrlLoading || disabled) && "disabled"
               }`}
             >
               {formik.values.image ? (

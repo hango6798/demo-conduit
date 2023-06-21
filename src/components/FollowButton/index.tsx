@@ -36,13 +36,14 @@ export const FollowButton = ({
   }, [v, follow]);
 
   const handleClick = () => {
-    if (!user.username) {
+    if (!user) {
       dispatch(
         setShowPopup({
           name: Popup.LOGIN,
           open: true,
         })
       );
+      return;
     }
     setLoading(true);
     setFollow(!follow);

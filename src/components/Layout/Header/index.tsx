@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo } from "react";
+import { memo, useMemo } from "react";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./style.scss";
@@ -12,12 +12,11 @@ import {
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { fetchUser, logout, Popup, setShowPopup } from "store/userSlice";
+import { logout, Popup, setShowPopup } from "store/userSlice";
 
 const Header = () => {
   const dispatch = useAppDispatch();
   const {
-    token,
     user,
     showPopup: show,
     status,
@@ -25,10 +24,13 @@ const Header = () => {
   const userLoading = status.getUser === "loading";
 
   const userName: string = useMemo(() => {
-    return user.username.length > 10
-      ? user.username.substring(0, 10) + "..."
-      : user.username;
-  }, [user.username]);
+    if (user) {
+      return user.username.length > 10
+        ? user.username.substring(0, 10) + "..."
+        : user.username;
+    }
+    return "";
+  }, [user]);
 
   const showPopup = (name: Popup) => {
     dispatch(
@@ -43,12 +45,6 @@ const Header = () => {
     e.preventDefault();
     dispatch(logout());
   };
-
-  useEffect(() => {
-    if (token && !user.username) {
-      dispatch(fetchUser());
-    }
-  }, [user.username, token, dispatch]);
 
   return (
     <div className="shadow-sm sticky-top" style={{ zIndex: 1030 }}>
@@ -75,7 +71,7 @@ const Header = () => {
                 className="ms-auto"
                 children={undefined}
               ></NavDropdown>
-            ) : user.token ? (
+            ) : user ? (
               <NavDropdown
                 title={
                   <span className="text-secondary">

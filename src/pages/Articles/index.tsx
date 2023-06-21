@@ -1,94 +1,117 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { GlobalOutlined, HomeOutlined, TagOutlined } from "@ant-design/icons";
+import type { MenuProps } from "antd";
+import { Layout as LayoutAntd, Menu } from "antd";
 import { useAppDispatch, useAppSelector } from "store/hooks";
+import { fetchTags, setCurrentTag } from "store/tagsSlice";
+import { ListArticle } from "components/ListArticle";
+import { ParamsArticle, Tab } from "models";
 import {
   fetchFeedArticles,
   fetchGlobalArticles,
   setCurrentFavSlug,
 } from "store/articlesSlice";
-import { ParamsArticle, Tab } from "models";
-import { Pagination } from "components/Pagination";
 import { useNavigate } from "react-router-dom";
-import { ContentWrapper } from "components/Layout/ContentWrapper";
-import { Heading } from "components/Layout/Heading";
-import { PopularTags } from "components/Tags/PopularTags";
-import { Tabs } from "components/Tabs";
-import { ListArticle } from "components/ListArticle";
+import { Pagination } from "components/Pagination";
 import "./style.scss";
-import { TagSelect } from "components/Tags/TagSelect";
-import { fetchTags, setCurrentTag } from "store/tagsSlice";
+
+const { Sider } = LayoutAntd;
+
+type MenuItem = Required<MenuProps>["items"][number];
+
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[]
+): MenuItem {
+  return {
+    key,
+    icon,
+    children,
+    label,
+  } as MenuItem;
+}
 
 export const Articles = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { tags, currentTag } = useAppSelector((store) => store.tagsReducer);
+  const { user } = useAppSelector((store) => store.userReducer);
+  const { articlesCount, currentFavSlug, status } = useAppSelector(
+    (store) => store.articlesReducer
+  );
+  const [collapsed, setCollapsed] = useState(false);
 
-  const { currentFavSlug } = useAppSelector((store) => store.articlesReducer);
-  const { articlesCount } = useAppSelector((store) => store.articlesReducer);
-  const { token } = useAppSelector((store) => store.userReducer);
-  const { currentTag } = useAppSelector((store) => store.tagsReducer);
-
-  const uppercaseFirstChar = (string: string) => {
-    return string[0].toUpperCase() + string.slice(1);
-  };
-
-  // tabs
-  const listTabs = [
-    {
-      name: Tab.FEED,
-      hide: !token,
-      disabled: false,
-      content: uppercaseFirstChar(Tab.FEED),
-    },
-    {
-      name: Tab.GLOBAL,
-      hide: false,
-      disabled: false,
-      content: uppercaseFirstChar(Tab.GLOBAL),
-    },
-    {
-      name: Tab.TAG,
-      hide: currentTag === "",
-      disabled: true,
-      content: currentTag ? `# ${uppercaseFirstChar(currentTag)}` : "",
-    },
+  const items: MenuItem[] = [
+    user ? getItem("Feed", Tab.FEED, <HomeOutlined />) : null,
+    getItem("Global", Tab.GLOBAL, <GlobalOutlined />),
+    getItem(
+      "Popular tags",
+      Tab.TAG,
+      <TagOutlined />,
+      tags.map((tag: string) => {
+        if (tag.trim() !== "") {
+          return getItem(tag, tag);
+        }
+        return null;
+      })
+    ),
   ];
-  const defaultTab: Tab = token ? Tab.FEED : Tab.GLOBAL;
-  const [currentTab, setCurrentTab] = useState<Tab>(defaultTab);
-  // pagination
+
+  useEffect(() => {
+    dispatch(fetchTags());
+  }, [dispatch]);
+
+  // List Article
+  const [currentTab, setCurrentTab] = useState<Tab | undefined>(undefined);
+
+  useEffect(() => {
+    if (user) {
+      if (currentFavSlug) {
+        navigate(`/article/${currentFavSlug}`);
+        dispatch(setCurrentFavSlug(null));
+      } else {
+        setCurrentTab(Tab.FEED);
+      }
+    } else {
+      setCurrentTab(Tab.GLOBAL);
+    }
+    dispatch(setCurrentTag(null));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  // Pagination
   const limit = 10;
   const pagesCount = useMemo(() => {
     return Math.ceil(articlesCount / limit);
   }, [articlesCount]);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const params: ParamsArticle = {
-    limit,
-    offset: (currentPage - 1) * limit,
+  const handleTabChange = ({ key }: any) => {
+    setCurrentPage(1);
+    switch (key) {
+      case Tab.FEED:
+        setCurrentTab(Tab.FEED);
+        dispatch(setCurrentTag(null));
+        break;
+      case Tab.GLOBAL:
+        setCurrentTab(Tab.GLOBAL);
+        dispatch(setCurrentTag(null));
+        break;
+      default:
+        setCurrentTab(Tab.TAG);
+        dispatch(setCurrentTag(key));
+        break;
+    }
   };
 
   useEffect(() => {
-    dispatch(fetchTags());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (token) {
-      if (currentFavSlug) {
-        navigate(`/article/${currentFavSlug}`);
-        dispatch(setCurrentFavSlug(null));
-      } else {
-        setCurrentTab(Tab.FEED);
-        setCurrentPage(1);
-      }
-    } else {
-      setCurrentTab(Tab.GLOBAL);
-      setCurrentPage(1);
-    }
-    dispatch(setCurrentTag(""));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
-
-  useEffect(() => {
+    const params: ParamsArticle = {
+      limit,
+      offset: (currentPage - 1) * limit,
+    };
     if (currentTag) {
       dispatch(
         fetchGlobalArticles({
@@ -98,83 +121,52 @@ export const Articles = () => {
       );
     } else if (currentTab === Tab.GLOBAL) {
       dispatch(fetchGlobalArticles(params));
-    } else if (token && currentTab === Tab.FEED) {
+    } else if (user && currentTab === Tab.FEED) {
       dispatch(fetchFeedArticles(params));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, currentTag, currentTab]);
-
-  useEffect(() => {
-    const pagiTimeout = setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 1000);
-    return () => {
-      clearTimeout(pagiTimeout);
-    };
-  }, [currentPage]);
-
-  const handleTabChange = (tab: Tab) => {
-    setCurrentTab(tab);
-    dispatch(setCurrentTag(""));
-    setCurrentPage(1);
-  };
-
-  const handleTagClick = (tag: string) => {
-    dispatch(setCurrentTag(tag));
-    setCurrentPage(1);
-    setCurrentTab(Tab.TAG);
-    window.scrollTo(0, 0);
-  };
-
-  const handleTagChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setCurrentTag(e.target.value));
-    setCurrentPage(1);
-    if (e.target.value !== "") {
-      setCurrentTab(Tab.TAG);
-    }
-  };
+  }, [currentPage, currentTag, currentTab, dispatch]);
 
   return (
-    <div>
-      {!token && (
-        <Heading>
-          <div className="h1 ">conduit</div>
-          <div className="h5 fw-light">A place to share your knowledge.</div>
-        </Heading>
-      )}
-      <ContentWrapper>
-        <Row className="my-4">
-          <Col xs={3} className="popular-tags">
-            <div className="sticky-top" style={{ top: "88px" }}>
-              <PopularTags
-                currentTag={currentTag}
-                handleTagClick={handleTagClick}
-              />
-            </div>
-          </Col>
-          <Col xs={12} md={9}>
-            <Tabs
-              listTabs={listTabs}
-              handleTabChange={handleTabChange}
-              currentTab={currentTab}
-            />
-            <div className="tag-select mb-4">
-              <TagSelect
-                currentTag={currentTag}
-                handleTagChange={handleTagChange}
-              />
-            </div>
-            {/* List article */}
-            <ListArticle limit={limit} />
-            {/* Pagination */}
-            <Pagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              pagesCount={pagesCount}
-            />
-          </Col>
-        </Row>
-      </ContentWrapper>
-    </div>
+    <LayoutAntd
+      hasSider
+      style={{
+        overflow: "hidden",
+        height: "calc(100vh - 64px)",
+        position: "fixed",
+        left: 0,
+        top: 64,
+        bottom: 0,
+        width: "100%",
+      }}
+    >
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+        theme="light"
+      >
+        <div className="demo-logo-vertical" />
+        <Menu
+          theme="light"
+          defaultSelectedKeys={[user ? Tab.FEED : Tab.GLOBAL]}
+          mode="inline"
+          items={items}
+          className="text-secondary py-1"
+          onSelect={handleTabChange}
+          selectedKeys={[currentTag || currentTab || Tab.GLOBAL]}
+        />
+      </Sider>
+      <div className="content w-100 p-2" style={{ overflowY: "auto" }}>
+        <ListArticle />
+        {status.articles !== "loading" && (
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            pagesCount={pagesCount}
+          />
+        )}
+      </div>
+    </LayoutAntd>
   );
 };

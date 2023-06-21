@@ -1,16 +1,18 @@
 
-.tag-select{
-    display: none;
-}
-@media screen and (max-width: 767px) {
-    .tabs{
-        margin-bottom: 10px!important;
+.ant-layout-sider-children{
+    overflow-y: auto;
+    &::-webkit-scrollbar{
+        width: 4px;
+        border-radius: 2px;
     }
-    .tag-select{
-        display: block;
-        width: 100%;
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
     }
-    .popular-tags{
-        display: none;
+    &::-webkit-scrollbar-thumb {
+        background: #a8a8a8;
+        border-radius: 2px;
+    }
+    .ant-menu{
+        border-right: 0!important;
     }
 }

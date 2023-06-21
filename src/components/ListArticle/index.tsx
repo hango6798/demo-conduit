@@ -1,48 +1,40 @@
-import { ListGroup, Row, Col } from "react-bootstrap";
 import { Article } from "models";
 import { ArticleItem } from "components/ArticleItem";
 import { ArticleSkeleton } from "components/ArticleItem/ArticleSkeleton";
 import { useAppSelector } from "store/hooks";
 
-interface Props {
-  limit: number;
-}
-
-export const ListArticle = ({ limit }: Props) => {
+export const ListArticle = () => {
   const { status, articles } = useAppSelector((store) => store.articlesReducer);
+  if (status.articles === "failed") {
+    return <div className="text-center h4">Get Data Failed!</div>;
+  }
+  if (status.articles === "loading") {
+    return (
+      <div className="w-100">
+        {Array(2)
+          .fill(0)
+          .map((item, index: number) => {
+            return (
+              <div key={index} className="mb-3 w-100">
+                <ArticleSkeleton />
+              </div>
+            );
+          })}
+      </div>
+    );
+  }
+  if (!articles.length) {
+    return <div className="text-center h4">No articles are here... yet.</div>;
+  }
   return (
-    <>
-      <ListGroup className="border-0">
-        <Row>
-          {status.articles === "failed" && (
-            <Col xs={12} className="text-center">
-              Get Data Failed!
-            </Col>
-          )}
-          {status.articles === "loading" &&
-            Array(limit)
-              .fill(0)
-              .map((item, index: number) => {
-                return (
-                  <Col xs={12} key={index} className="mb-3">
-                    <ArticleSkeleton />
-                  </Col>
-                );
-              })}
-          {status.articles === "idle" &&
-            (articles.length === 0 ? (
-              <div className="text-center">No articles are here... yet.</div>
-            ) : (
-              articles.map((article: Article, index: number) => {
-                return (
-                  <Col xs={12} key={index} className="mb-4">
-                    <ArticleItem article={article} />
-                  </Col>
-                );
-              })
-            ))}
-        </Row>
-      </ListGroup>
-    </>
+    <div>
+      {articles.map((article: Article, index: number) => {
+        return (
+          <div key={index} className="mb-2">
+            <ArticleItem article={article} />
+          </div>
+        );
+      })}
+    </div>
   );
 };

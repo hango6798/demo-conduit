@@ -10,6 +10,7 @@ import { Pagination } from "components/Pagination";
 import Skeleton from "react-loading-skeleton";
 import "./style.scss";
 import { Popconfirm } from "antd";
+import formatTime from "utils/formatTime";
 
 interface Props {
   slug: string;
@@ -66,16 +67,6 @@ const ListComments = ({ slug, currentPage, setCurrentPage }: Props) => {
     dispatch(deleteComment({ slug, commentId }));
   };
 
-  const getCreatedTime = (time: string) => {
-    return new Date(time).toLocaleString("en-us", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-    });
-  };
   return (
     <div ref={commentRef}>
       {gettingComment && <div className="text-center mb-2">Loading...</div>}
@@ -117,11 +108,11 @@ const ListComments = ({ slug, currentPage, setCurrentPage }: Props) => {
                     {comment.author.username}
                   </Link>
                   <span className="opacity-75 small time">
-                    {getCreatedTime(comment.createdAt)}
+                    {formatTime(comment.createdAt)}
                   </span>
                 </div>
                 {/* Modal */}
-                {user.username === comment.author.username && (
+                {user && user.username === comment.author.username && (
                   <Popconfirm
                     title="Delete comment"
                     description="Are you sure to delete this comment?"

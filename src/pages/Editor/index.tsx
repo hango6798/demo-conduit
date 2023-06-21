@@ -21,8 +21,12 @@ export const Editor = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { tags } = useAppSelector((store) => store.tagsReducer);
-  const { currentArticle } = useAppSelector((store) => store.articlesReducer);
+  const { currentArticle, status } = useAppSelector(
+    (store) => store.articlesReducer
+  );
   const [listTags, setListTags] = useState<string[]>([]);
+
+  const disabled = status.currentArticle === "loading";
 
   const defaultTags =
     currentArticle.slug === slug ? currentArticle.tagList : [];
@@ -52,10 +56,23 @@ export const Editor = () => {
 
   const onSubmit = (values: NewArticle) => {
     const article: NewArticle = values;
+    const compareValues = (obj1: any, obj2: any) => {
+      for (let key of Object.keys(obj1)) {
+        if (obj1[key] !== obj2[key]) {
+          return false;
+        }
+      }
+      return true;
+    };
     if (slug) {
+      if (compareValues(values, currentArticle)) {
+        navigate(`/article/${slug}`);
+        return;
+      }
       dispatch(updateArticle({ slug, article }))
         .then((data: any) => {
-          navigate(`/article/${data.payload.slug}`);
+          console.log(data.payload.slug);
+          // navigate(`/article/${data.payload.slug}`);
         })
         .catch((error) => {
           console.log(error);
@@ -101,8 +118,11 @@ export const Editor = () => {
     if (!currentArticle.slug || currentArticle.slug !== slug) {
       slug && dispatch(getCurrentArticle(slug));
     }
+    // Neu khong co current article slug hoac current article slug khac slug thi getCurrentArticle(slug)
+    // Sau do neu get thanh cong thi set values cho formik, list tags
+    // Neu khong thanh cong thi navigate ve editor <khong slug>
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentArticle.slug]);
+  }, [slug]);
 
   // Events
   const uppercaseFirstChar = (string: string) => {
@@ -120,12 +140,15 @@ export const Editor = () => {
         <p className="h3 text-center text-primary mb-2">New article</p>
         {/* Article title */}
         <Form.Group className="mb-3">
-          <Form.Label>Title</Form.Label>
+          <Form.Label>
+            Title <span className="text-danger">*</span>
+          </Form.Label>
           <Form.Control
             placeholder="Article title"
             size="lg"
             {...formik.getFieldProps("title")}
             isInvalid={touched.title && !!errors.title}
+            disabled={disabled}
           />
           <Form.Control.Feedback type="invalid">
             {errors.title && uppercaseFirstChar(errors.title)}
@@ -134,11 +157,14 @@ export const Editor = () => {
 
         {/* Article description */}
         <Form.Group className="mb-3">
-          <Form.Label>Description</Form.Label>
+          <Form.Label>
+            Description <span className="text-danger">*</span>
+          </Form.Label>
           <Form.Control
             placeholder="What's this article about?"
             {...formik.getFieldProps("description")}
             isInvalid={touched.description && !!errors.description}
+            disabled={disabled}
           />
           <Form.Control.Feedback type="invalid">
             {errors.description && uppercaseFirstChar(errors.description)}
@@ -147,13 +173,16 @@ export const Editor = () => {
 
         {/* Article body */}
         <Form.Group className="mb-3">
-          <Form.Label>Body</Form.Label>
+          <Form.Label>
+            Body <span className="text-danger">*</span>
+          </Form.Label>
           <Form.Control
             as="textarea"
             rows={8}
             placeholder="Write your article (in markdown)"
             {...formik.getFieldProps("body")}
             isInvalid={touched.body && !!errors.body}
+            disabled={disabled}
           />
           <Form.Control.Feedback type="invalid">
             {errors.body && uppercaseFirstChar(errors.body)}
@@ -177,13 +206,19 @@ export const Editor = () => {
                 onChange={handleTagChange}
                 style={{ width: "100%" }}
                 options={options}
+                disabled={disabled}
               />
             </Space>
           )}
         </Form.Group>
 
         {/* Submit button */}
-        <Button className="mx-auto d-block" size="lg" type="submit">
+        <Button
+          className="mx-auto d-block"
+          size="lg"
+          type="submit"
+          disabled={disabled}
+        >
           Publish Article
         </Button>
       </Form>

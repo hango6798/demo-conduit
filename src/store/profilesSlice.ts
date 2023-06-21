@@ -61,13 +61,7 @@ export const profilesSlice = createSlice({
         })
         builder.addCase(getProfile.rejected, (state:UserState, action: PayloadAction<any>) => {
             state.status.getProfile = "failed"
-            console.log(action.payload)
-            // const listError = []
-            // for(let key of Object.keys(action.payload)){
-            //     const message = key[0].toUpperCase() + key.slice(1) + ' ' + action.payload[key]
-            //     listError.push(message)
-            // }
-            // state.error.getProfile = listError[listError.length - 1]
+            state.error.getProfile = action.payload
         })
     }
 });

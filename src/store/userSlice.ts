@@ -9,22 +9,22 @@ export enum Popup {
     LOGIN = 'login',
     REGISTER = 'register',
 }
+type Error = {
+    login: string | null,
+    register: string | null,
+    getUser: string | null,
+    updateUser: string | null,
+}
 
 export interface UserState {
-  user: User;
+  user: User | null;
   status: {
     login: Status,
     register: Status,
     getUser: Status,
     updateUser: Status,
   }
-  error: {
-    login: string | null,
-    register: string | null,
-    getUser: string | null,
-    updateUser: string | null,
-  };
-  token: string | undefined;
+  error: Error;
   showPopup: {
     name: Popup,
     open: boolean,
@@ -32,13 +32,7 @@ export interface UserState {
 }
 
 const initialState:UserState = {
-  user: {
-    bio: '',
-    username: '',
-    email: '',
-    image: '',
-    token: undefined,
-  },
+  user: null,
   status: {
     login: 'idle',
     register: 'idle',
@@ -51,7 +45,6 @@ const initialState:UserState = {
     getUser: null,
     updateUser: null,
   },
-  token: undefined,
   showPopup: {
     name: Popup.LOGIN,
     open: false,
@@ -119,11 +112,13 @@ export const userSlice = createSlice({
         logout: (state: UserState) => {
             state.user = initialState.user
             state.error = initialState.error
-            state.token = undefined
             state.status = initialState.status
         },
         setShowPopup: (state: UserState, action:PayloadAction<{name: Popup,open: boolean,}>) => {
             state.showPopup = action.payload
+        },
+        setError: (state: UserState, action:PayloadAction<Error>) => {
+            state.error = action.payload
         },
     },
     extraReducers: (builder) => {
@@ -151,7 +146,6 @@ export const userSlice = createSlice({
         builder.addCase(login.fulfilled, (state:UserState, action: PayloadAction<any>) => {
             state.status.login = "idle"
             state.user = action.payload
-            state.token = action.payload.token
         })
         builder.addCase(login.rejected, (state:UserState, action: PayloadAction<any>) => {
             state.status.login = "failed"
@@ -171,7 +165,6 @@ export const userSlice = createSlice({
         builder.addCase(register.fulfilled, (state:UserState, action: PayloadAction<any>) => {
             state.status.register = "idle"
             state.user = action.payload
-            state.token = action.payload.token
         })
         builder.addCase(register.rejected, (state:UserState, action: PayloadAction<any>) => {
             state.status.register = "failed"
@@ -189,7 +182,6 @@ export const userSlice = createSlice({
         builder.addCase(updateUser.fulfilled, (state:UserState, action: PayloadAction<any>) => {
             state.status.updateUser = "idle"
             state.user = action.payload
-            state.token = action.payload.token
         })
         builder.addCase(updateUser.rejected, (state:UserState, action: PayloadAction<any>) => {
             state.status.updateUser = "failed"
@@ -198,12 +190,12 @@ export const userSlice = createSlice({
     }
 });
 
-export const { logout, setShowPopup } = userSlice.actions;
+export const { logout, setShowPopup, setError } = userSlice.actions;
 
 const persistConfig = {
-    key: 'token',
+    key: 'user',
     storage: storage,
-    whitelist: ['token'],
+    whitelist: ['user'],
 };
 
 export default persistReducer(persistConfig, userSlice.reducer);

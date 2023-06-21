@@ -15,7 +15,7 @@ interface Props {
 
 const CommentForm = ({ slug, setCurrentPage }: Props) => {
   const dispatch = useAppDispatch();
-  const { token, user } = useAppSelector((store) => store.userReducer);
+  const { user } = useAppSelector((store) => store.userReducer);
   const { status } = useAppSelector((store) => store.commentsReducer);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -56,13 +56,15 @@ const CommentForm = ({ slug, setCurrentPage }: Props) => {
   };
 
   const handleSignInClick = () => {
-    dispatch(setShowPopup({
-      name: Popup.LOGIN,
-      open: true,
-    }));
+    dispatch(
+      setShowPopup({
+        name: Popup.LOGIN,
+        open: true,
+      })
+    );
   };
 
-  if (token) {
+  if (user) {
     return (
       <Form
         className="mb-4 comment-area shadow-sm border text-light p-2 rounded"

@@ -26,7 +26,7 @@ export const Profile = () => {
     ? params?.username?.replace("@", "")
     : "";
 
-  const isUserProfile = user.username === usernameParam;
+  const isUserProfile = !!user && user.username === usernameParam;
   const currentProfile: any = isUserProfile ? user : profile;
   const following = currentProfile.following;
 
@@ -155,7 +155,7 @@ export const Profile = () => {
           </Col>
           <Col xs={12}>
             {/* list articles */}
-            <ListArticle limit={limit} />
+            <ListArticle />
             {/* Pagination */}
             <Pagination
               currentPage={currentPage}

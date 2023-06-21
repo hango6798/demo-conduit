@@ -4,25 +4,41 @@ import { Link } from "react-router-dom";
 import "./style.scss";
 import { FavoriteButton } from "components/FavoriteButton";
 import Author from "components/Author";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { useMemo } from "react";
+import formatTime from "utils/formatTime";
+import { fetchGlobalArticles } from "store/articlesSlice";
+import { setCurrentTag } from "store/tagsSlice";
 
 interface Props {
   article: Article;
 }
 
 export const ArticleItem = ({ article }: Props) => {
+  const dispatch = useAppDispatch();
   const { currentTag } = useAppSelector((store) => store.tagsReducer);
   const articleUrl = `/article/${article.slug}`;
 
   const author = article.author;
-  const createdTime = new Date(article.createdAt).toLocaleString("en-us", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
+  const createdTime = useMemo(() => {
+    return formatTime(article.createdAt);
+  }, [article.createdAt]);
+
+  const handleTagClick = (tag: string) => {
+    if (tag !== currentTag) {
+      dispatch(setCurrentTag(tag));
+      dispatch(
+        fetchGlobalArticles({
+          limit: 10,
+          tag: tag,
+          offset: 0,
+        })
+      );
+    }
+  };
 
   return (
-    <div className="p-3 article-item rounded">
+    <div className="p-3 article-item rounded bg-white">
       <div className="d-flex justify-content-between align-items-center">
         <Author author={author} createdTime={createdTime} variant="light" />
         <FavoriteButton article={article} size="sm" />
@@ -46,9 +62,11 @@ export const ArticleItem = ({ article }: Props) => {
             return (
               <ListGroup.Item
                 key={index}
+                style={{ cursor: "pointer" }}
                 className={`border rounded small text-secondary p-0 px-2 pb-1 mx-1 ${
                   tag === currentTag && "border-secondary"
                 }`}
+                onClick={() => handleTagClick(tag)}
               >
                 {tag}
               </ListGroup.Item>

@@ -11,10 +11,8 @@ axiosClient.interceptors.request.use(
     (config) => {
         // get token from store
         const currentStore = store.getState()
-        const token = currentStore.userReducer.token
-        if (token) {
-            config.headers.Authorization = token ? `Bearer ${token}` : undefined;
-        }
+        const user = currentStore.userReducer.user
+        config.headers.Authorization = user ? `Bearer ${user.token}` : undefined;
         return config;
     },
     (err) => Promise.reject(err)

@@ -7,7 +7,7 @@ import { Article } from "models";
 import "./style.scss";
 import { useEffect, useMemo, useState } from "react";
 import articlesApi from "api/articlesApi";
-import { setCurrentArticle } from "store/articlesSlice";
+import { setCurrentArticle, setCurrentFavSlug } from "store/articlesSlice";
 
 interface Props {
   article: Article;
@@ -43,13 +43,14 @@ export const FavoriteButton = ({
   }, [article]);
 
   const toggleFavorite = () => {
-    if (!user.username) {
+    if (!user) {
       dispatch(
         setShowPopup({
           name: Popup.LOGIN,
           open: true,
         })
       );
+      dispatch(setCurrentFavSlug(article.slug));
       return;
     }
 

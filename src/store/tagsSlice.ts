@@ -4,13 +4,13 @@ import tagsApi from 'api/tagsApi';
 export interface TagsState {
     tags: string[];
     status: 'idle' | 'loading' | 'failed';
-    currentTag: string;
+    currentTag: string | null;
 }
 
 const initialState:TagsState = {
     tags: [],
     status: 'idle',
-    currentTag: '',
+    currentTag: null,
 };
 
 export const fetchTags = createAsyncThunk(
@@ -31,7 +31,7 @@ export const tagsSlice = createSlice({
     name: 'tags',
     initialState,
     reducers: {
-        setCurrentTag: (state: TagsState, action: PayloadAction<string>) => {
+        setCurrentTag: (state: TagsState, action: PayloadAction<string | null>) => {
             state.currentTag = action.payload
         }
     },

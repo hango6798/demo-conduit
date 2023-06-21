@@ -9,9 +9,9 @@ interface Props {
 
 export const RequiredAuth = ({ children }: Props) => {
   const dispatch = useAppDispatch();
-  const token = useAppSelector((store) => store.userReducer.token);
+  const user = useAppSelector((store) => store.userReducer.user);
   useEffect(() => {
-    !token &&
+    !user &&
       dispatch(
         setShowPopup({
           name: Popup.LOGIN,
@@ -19,6 +19,6 @@ export const RequiredAuth = ({ children }: Props) => {
         })
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
-  return token ? children : <Navigate to="/" />;
+  }, [user]);
+  return user ? children : <Navigate to="/" />;
 };

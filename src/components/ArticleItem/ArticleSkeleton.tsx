@@ -5,14 +5,14 @@ import { AuthorSkeleton } from "components/Author/AuthorSkeleton";
 
 export const ArticleSkeleton = () => {
   return (
-    <div className="p-3 border rounded h-100">
+    <div className="p-3 border rounded h-100 bg-white">
       <div className="d-flex justify-content-between align-items-center">
         <AuthorSkeleton />
         <Skeleton width={70} height={30} />
       </div>
       <hr className="mt-3 mb-2" />
       <Skeleton count={2} />
-      <Skeleton height={63} />
+      <Skeleton height={43} />
       <div className="d-flex mt-2 align-items-center justify-content-between">
         <ListGroup
           className="d-flex flex-row flex-wrap tag-list"

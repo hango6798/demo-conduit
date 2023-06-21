@@ -1,7 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Heading } from "components/Layout/Heading";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { deleteArticle, getCurrentArticle } from "store/articlesSlice";
 import Author from "components/Author";
 import { Button } from "react-bootstrap";
@@ -16,6 +16,7 @@ import ListComments from "components/Comments/ListComments";
 import { FollowButton } from "components/FollowButton";
 import { ConfirmDelete } from "components/Popup/ConfirmDelete";
 import { getComments } from "store/commentsSlice";
+import formatTime from "utils/formatTime";
 
 export const ArticleDetail = () => {
   const navigate = useNavigate();
@@ -29,22 +30,22 @@ export const ArticleDetail = () => {
     (store) => store.articlesReducer
   );
 
-  const createdTime = new Date(currentArticle.createdAt).toLocaleString(
-    "en-us",
-    { month: "long", day: "numeric", year: "numeric" }
-  );
+  const createdTime = useMemo(() => {
+    return formatTime(currentArticle.createdAt);
+  }, [currentArticle.createdAt]);
 
   const author = currentArticle.author;
-  const isUserPost = user.username === author.username;
+  const isUserPost = !!user && user.username === author.username;
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [showConfirmDelete, setShowConfirmDelete] = useState<boolean>(false);
 
   useEffect(() => {
     if (slug) {
-      dispatch(getCurrentArticle(slug));
+      slug !== currentArticle.slug && dispatch(getCurrentArticle(slug));
       dispatch(getComments(slug));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, slug]);
 
   const handleDeleteArticle = () => {
