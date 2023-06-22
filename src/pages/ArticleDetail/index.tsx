@@ -41,23 +41,19 @@ export const ArticleDetail = () => {
   const [showConfirmDelete, setShowConfirmDelete] = useState<boolean>(false);
 
   useEffect(() => {
-    if (slug) {
-      slug !== currentArticle.slug && dispatch(getCurrentArticle(slug));
+    if (slug && (slug !== currentArticle.slug || !currentArticle.slug)) {
+      dispatch(getCurrentArticle(slug));
       dispatch(getComments(slug));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, slug]);
+  }, [dispatch, slug, currentArticle]);
 
   const handleDeleteArticle = () => {
     !!slug &&
-      dispatch(deleteArticle(slug))
-        .then(() => {
-          navigate("/");
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Try again!");
-        });
+      dispatch(deleteArticle(slug)).then((res) => {
+        res.meta.requestStatus === "rejected"
+          ? alert("Try again!")
+          : navigate("/");
+      });
     setShowConfirmDelete(false);
   };
 

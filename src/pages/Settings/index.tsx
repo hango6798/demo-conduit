@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { updateUser } from "store/userSlice";
 import { useNavigate } from "react-router-dom";
+import checkValuesChanged from "utils/checkValuesChanged";
+import getBase64 from "utils/getBase64";
 
 export const Settings = () => {
   const dispatch = useAppDispatch();
@@ -23,41 +25,23 @@ export const Settings = () => {
 
   // Formik
   const initialValues = {
-    image: user ? user.image : "",
-    username: user ? user.username : "",
-    bio: user ? user.bio : "",
-    email: user ? user.email : "",
+    image: user?.image,
+    username: user?.username,
+    bio: user?.bio,
+    email: user?.email,
     newPassword: "",
     confirmPassword: "",
   };
   const onSubmit = (values: any) => {
-    const newInfo = {
-      image: values.image,
-      username: values.username,
-      bio: values.bio,
-      email: values.email,
-      password: values.newPassword,
-    };
-    const compareValues = (obj1: any, obj2: any) => {
-      for (let key of Object.keys(obj1)) {
-        if (obj1[key] !== obj2[key]) {
-          return false;
-        }
-      }
-      return true;
-    };
-    if (!compareValues(values, initialValues)) {
-      dispatch(updateUser(newInfo)).then((res) => {
-        const reqStatus = res.meta.requestStatus;
-        if (reqStatus === "fulfilled") {
-          navigate(`/profiles/@${values.username}`);
-        } else if (reqStatus === "rejected") {
-          alert("Something goes wrong, please reload website and try again!");
-        }
-      });
-    } else {
+    if (!checkValuesChanged(values, initialValues)) {
       navigate(`/profiles/@${values.username}`);
+      return;
     }
+    dispatch(updateUser(values)).then((res) => {
+      res.meta.requestStatus === "rejected"
+        ? alert("Try again!")
+        : navigate(`/profiles/@${values.username}`);
+    });
   };
   const validate = (values: any) => {
     const errors: any = {};
@@ -98,15 +82,11 @@ export const Settings = () => {
   function handleChangeAvatar(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     const payload = new FormData();
-    const getBase64 = (file: any, callback: any) => {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => callback(reader.result));
-      reader.readAsDataURL(file);
-    };
 
     if (files && files.length) {
       getBase64(files[0], (base64File: any) => {
-        payload.append("image", base64File.toString().split(",")[1]);
+        const base64Img = base64File.toString().split(",")[1];
+        payload.append("image", base64Img);
         setImgUrlLoading(true);
         axios
           .post(
@@ -125,10 +105,6 @@ export const Settings = () => {
           });
       });
     }
-  }
-
-  if (!user) {
-    return null;
   }
 
   return (

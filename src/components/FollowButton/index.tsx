@@ -52,7 +52,6 @@ export const FollowButton = ({
     api(username)
       .then((r) => {
         setFollow(r.data.profile.following);
-        console.log(currentArticle);
         dispatch(
           setCurrentArticle({
             ...currentArticle,

@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { logout, Popup, setShowPopup } from "store/userSlice";
+import resetData from "utils/resetData";
 
 const Header = () => {
   const dispatch = useAppDispatch();
@@ -44,6 +45,7 @@ const Header = () => {
   const handleLogout = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     dispatch(logout());
+    resetData();
   };
 
   return (

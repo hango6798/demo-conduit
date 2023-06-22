@@ -38,10 +38,13 @@ export const Articles = () => {
   const navigate = useNavigate();
   const { tags, currentTag } = useAppSelector((store) => store.tagsReducer);
   const { user } = useAppSelector((store) => store.userReducer);
-  const { articlesCount, currentFavSlug, status } = useAppSelector(
+  const { articles, currentFavSlug, status } = useAppSelector(
     (store) => store.articlesReducer
   );
   const [collapsed, setCollapsed] = useState(false);
+  const articlesCount: number = useMemo(() => {
+    return articles?.articlesCount || 0;
+  }, [articles]);
 
   const items: MenuItem[] = [
     user ? getItem("Feed", Tab.FEED, <HomeOutlined />) : null,
@@ -60,8 +63,8 @@ export const Articles = () => {
   ];
 
   useEffect(() => {
-    dispatch(fetchTags());
-  }, [dispatch]);
+    !tags.length && dispatch(fetchTags());
+  }, [dispatch, tags]);
 
   // List Article
   const [currentTab, setCurrentTab] = useState<Tab | undefined>(undefined);

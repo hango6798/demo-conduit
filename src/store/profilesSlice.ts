@@ -4,7 +4,7 @@ import profilesApi from 'api/profilesApi';
 
 type Status = 'idle' | 'loading' | 'failed'
 
-export interface UserState {
+export interface ProfileState {
   profile: Profile;
   status: {
     getProfile: Status;
@@ -16,7 +16,7 @@ export interface UserState {
   };
 }
 
-const initialState:UserState = {
+export const initialState:ProfileState = {
     profile: {
         username: '',
         bio: '',
@@ -49,22 +49,27 @@ export const getProfile = createAsyncThunk(
 export const profilesSlice = createSlice({
     name: 'profiles',
     initialState,
-    reducers: {},
+    reducers: {
+        setProfile: (state: ProfileState, action: PayloadAction<Profile>) => {
+            state.profile = action.payload
+        }
+    },
     extraReducers: (builder) => {
         // Get Profile
         builder.addCase(getProfile.pending, (state) => {
             state.status.getProfile = "loading"
         })
-        builder.addCase(getProfile.fulfilled, (state:UserState, action: PayloadAction<any>) => {
+        builder.addCase(getProfile.fulfilled, (state:ProfileState, action: PayloadAction<any>) => {
             state.status.getProfile = "idle"
             state.profile = action.payload
         })
-        builder.addCase(getProfile.rejected, (state:UserState, action: PayloadAction<any>) => {
+        builder.addCase(getProfile.rejected, (state:ProfileState, action: PayloadAction<any>) => {
             state.status.getProfile = "failed"
             state.error.getProfile = action.payload
         })
     }
 });
 
+export const {setProfile} = profilesSlice.actions
 
 export default profilesSlice.reducer;

@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { ContentWrapper } from "components/Layout/ContentWrapper";
 import "./style.scss";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { fetchTags } from "store/tagsSlice";
 import {
@@ -15,6 +15,8 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { Select, Space } from "antd";
 import type { SelectProps } from "antd";
+import checkValuesChanged from "utils/checkValuesChanged";
+import uppercaseFirstChar from "utils/uppercaseFirstChar";
 
 export const Editor = () => {
   const { slug } = useParams();
@@ -24,7 +26,6 @@ export const Editor = () => {
   const { currentArticle, status } = useAppSelector(
     (store) => store.articlesReducer
   );
-  const [listTags, setListTags] = useState<string[]>([]);
 
   const disabled = status.currentArticle === "loading";
 
@@ -33,9 +34,8 @@ export const Editor = () => {
 
   // Effects
   useEffect(() => {
-    dispatch(fetchTags());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    !tags.length && dispatch(fetchTags());
+  }, [dispatch, tags]);
 
   const options: SelectProps["options"] = [];
 
@@ -55,38 +55,20 @@ export const Editor = () => {
   };
 
   const onSubmit = (values: NewArticle) => {
-    const article: NewArticle = values;
-    const compareValues = (obj1: any, obj2: any) => {
-      for (let key of Object.keys(obj1)) {
-        if (obj1[key] !== obj2[key]) {
-          return false;
-        }
-      }
-      return true;
-    };
     if (slug) {
-      if (compareValues(values, currentArticle)) {
-        navigate(`/article/${slug}`);
-        return;
-      }
-      dispatch(updateArticle({ slug, article }))
-        .then((data: any) => {
-          console.log(data.payload.slug);
-          // navigate(`/article/${data.payload.slug}`);
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Try again!");
-        });
+      !checkValuesChanged(values, currentArticle)
+        ? navigate(`/article/${slug}`)
+        : dispatch(updateArticle({ slug, article: values })).then((res) => {
+            res.meta.requestStatus === "rejected"
+              ? alert("Try again!")
+              : navigate(`/article/${res.payload.slug}`);
+          });
     } else {
-      dispatch(createArticle(article))
-        .then((data) => {
-          navigate(`/article/${data.payload.slug}`);
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Try again!");
-        });
+      dispatch(createArticle(values)).then((res) => {
+        res.meta.requestStatus === "rejected"
+          ? alert("Try again!")
+          : navigate(`/article/${res.payload.slug}`);
+      });
     }
   };
 
@@ -106,31 +88,32 @@ export const Editor = () => {
   const errors = formik.errors;
 
   useEffect(() => {
-    if (slug && currentArticle.slug === slug) {
+    const setValuesFormik = (data: NewArticle) => {
       formik.setValues({
-        title: currentArticle.title,
-        description: currentArticle.description,
-        body: currentArticle.body,
-        tagList: currentArticle.tagList,
+        title: data.title,
+        description: data.description,
+        body: data.body,
+        tagList: data.tagList,
       });
-      setListTags(currentArticle.tagList);
+    };
+    if (slug) {
+      if (currentArticle.slug === slug) {
+        setValuesFormik(currentArticle);
+      } else {
+        dispatch(getCurrentArticle(slug)).then((res) => {
+          res.meta.requestStatus === "rejected"
+            ? navigate("/editor")
+            : setValuesFormik(res.payload);
+        });
+      }
     }
-    if (!currentArticle.slug || currentArticle.slug !== slug) {
-      slug && dispatch(getCurrentArticle(slug));
-    }
-    // Neu khong co current article slug hoac current article slug khac slug thi getCurrentArticle(slug)
-    // Sau do neu get thanh cong thi set values cho formik, list tags
-    // Neu khong thanh cong thi navigate ve editor <khong slug>
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   // Events
-  const uppercaseFirstChar = (string: string) => {
-    return string[0].toUpperCase() + string.slice(1, string.length);
-  };
 
   const handleTagChange = (value: string[]) => {
-    setListTags(value);
     formik.setFieldValue("tagList", value);
   };
 
@@ -202,7 +185,7 @@ export const Editor = () => {
                 mode="tags"
                 placeholder="Please select"
                 defaultValue={defaultTags}
-                value={listTags}
+                value={formik.values.tagList}
                 onChange={handleTagChange}
                 style={{ width: "100%" }}
                 options={options}

@@ -13,6 +13,7 @@ import {
   setError,
 } from "store/userSlice";
 import React, { useEffect } from "react";
+import resetData from "utils/resetData";
 
 export const UserPopup = () => {
   const dispatch = useAppDispatch();
@@ -104,7 +105,9 @@ export const UserPopup = () => {
         email: values.email,
         password: values.password,
       };
-      dispatch(login(loginInfo));
+      dispatch(login(loginInfo)).then((res) => {
+        res.meta.requestStatus === "fulfilled" && resetData();
+      });
     },
     validationSchema: Yup.object({
       email: Yup.string().required().email(),

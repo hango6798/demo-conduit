@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { Popup, setShowPopup } from "store/userSlice";
-import { useEffect } from "react";
+import { FunctionComponentElement, useEffect } from "react";
 
 interface Props {
-  children: any;
+  children: FunctionComponentElement<any>;
 }
 
 export const RequiredAuth = ({ children }: Props) => {

@@ -1,4 +1,4 @@
-import { NewArticle, ParamsArticle } from 'models/article';
+import { Articles, NewArticle, ParamsArticle } from 'models/article';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Article } from 'models';
 import articlesApi from 'api/articlesApi';
@@ -6,27 +6,25 @@ import articlesApi from 'api/articlesApi';
 type Status = 'idle' | 'loading' | 'failed'
 
 export interface ArticleState {
-    articles: Article[];
+    articles: Articles | null;
     status: {
         articles: Status;
         currentArticle: Status;
     };
-    articlesCount: number;
     currentFavSlug: string | null;
     currentArticle: Article;
 }
 
-const initialState:ArticleState = {
-    articles: [],
+export const initialState:ArticleState = {
+    articles: null,
     status: {
         articles: 'idle',
         currentArticle: 'idle',
     },
-    articlesCount: 0,
     currentFavSlug: null,
     currentArticle: {
-        title: '',
         slug: '',
+        title: '',
         description: '',
         body: '',
         tagList: [],
@@ -121,7 +119,6 @@ export const deleteArticle = createAsyncThunk(
     }
 )
 
-
 export const articlesSlice = createSlice({
     name: 'articles',
     initialState,
@@ -132,6 +129,9 @@ export const articlesSlice = createSlice({
         setCurrentArticle: (state: ArticleState, action: PayloadAction<Article>) => {
             state.currentArticle = action.payload
         },
+        setArticles: (state: ArticleState, action: PayloadAction<Articles | null>) => {
+            state.articles = action.payload
+        },
     },
     extraReducers: (builder) => {
         // Fetch Global Articles
@@ -140,8 +140,7 @@ export const articlesSlice = createSlice({
         })
         builder.addCase(fetchGlobalArticles.fulfilled, (state:ArticleState, action: PayloadAction<any>) => {
             state.status.articles = "idle"
-            state.articles = action.payload.articles
-            state.articlesCount = action.payload.articlesCount
+            state.articles = action.payload
         })
         builder.addCase(fetchGlobalArticles.rejected, (state:ArticleState, action: PayloadAction<any>) => {
             state.status.articles = "failed"
@@ -152,8 +151,7 @@ export const articlesSlice = createSlice({
         })
         builder.addCase(fetchFeedArticles.fulfilled, (state:ArticleState, action: PayloadAction<any>) => {
             state.status.articles = "idle"
-            state.articles = action.payload.articles
-            state.articlesCount = action.payload.articlesCount
+            state.articles = action.payload
         })
         builder.addCase(fetchFeedArticles.rejected, (state:ArticleState, action: PayloadAction<any>) => {
             state.status.articles = "failed"
@@ -204,6 +202,6 @@ export const articlesSlice = createSlice({
     }
 });
 
-export const {setCurrentFavSlug, setCurrentArticle} = articlesSlice.actions
+export const {setCurrentFavSlug, setCurrentArticle, setArticles} = articlesSlice.actions
 
 export default articlesSlice.reducer
