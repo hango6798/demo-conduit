@@ -38,10 +38,9 @@ export const Articles = () => {
   const navigate = useNavigate();
   const { tags, currentTag } = useAppSelector((store) => store.tagsReducer);
   const { user } = useAppSelector((store) => store.userReducer);
-  const { articles, currentFavSlug, status } = useAppSelector(
+  const { articles, currentFavSlug } = useAppSelector(
     (store) => store.articlesReducer
   );
-  const [collapsed, setCollapsed] = useState(false);
   const articlesCount: number = useMemo(() => {
     return articles?.articlesCount || 0;
   }, [articles]);
@@ -143,12 +142,7 @@ export const Articles = () => {
         width: "100%",
       }}
     >
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-        theme="light"
-      >
+      <Sider breakpoint="lg" collapsedWidth="0" theme="light">
         <div className="demo-logo-vertical" />
         <Menu
           theme="light"
@@ -162,13 +156,11 @@ export const Articles = () => {
       </Sider>
       <div className="content w-100 p-2" style={{ overflowY: "auto" }}>
         <ListArticle />
-        {status.articles !== "loading" && (
-          <Pagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            pagesCount={pagesCount}
-          />
-        )}
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          pagesCount={pagesCount}
+        />
       </div>
     </LayoutAntd>
   );

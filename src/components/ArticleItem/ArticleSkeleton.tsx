@@ -5,7 +5,7 @@ import { AuthorSkeleton } from "components/Author/AuthorSkeleton";
 
 export const ArticleSkeleton = () => {
   return (
-    <div className="p-3 border rounded h-100 bg-white">
+    <div className="p-3 border rounded h-100 bg-white article-item">
       <div className="d-flex justify-content-between align-items-center">
         <AuthorSkeleton />
         <Skeleton width={70} height={30} />

@@ -133,13 +133,11 @@ const ListComments = ({ slug, currentPage, setCurrentPage }: Props) => {
         );
       })}
       {/* Pagination */}
-      {pagesCount > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          pagesCount={pagesCount}
-        />
-      )}
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        pagesCount={pagesCount}
+      />
     </div>
   );
 };

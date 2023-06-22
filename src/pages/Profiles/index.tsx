@@ -24,7 +24,7 @@ export const Profile = () => {
   const dispatch = useAppDispatch();
   const params = useParams();
   const { user } = useAppSelector((store) => store.userReducer);
-  const { articles, status: articlesStatus } = useAppSelector(
+  const { articles } = useAppSelector(
     (store) => store.articlesReducer
   );
   const { profile, status: profileStatus } = useAppSelector(
@@ -180,13 +180,11 @@ export const Profile = () => {
           })}
           activeKey={currentTab}
         />
-        {articlesStatus.articles !== "loading" && (
-          <Pagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            pagesCount={pagesCount}
-          />
-        )}
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          pagesCount={pagesCount}
+        />
       </ContentWrapper>
     </div>
   );
