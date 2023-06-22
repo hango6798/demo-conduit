@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { updateUser } from "store/userSlice";
 import { useNavigate } from "react-router-dom";
-import checkValuesChanged from "utils/checkValuesChanged";
 import getBase64 from "utils/getBase64";
 
 export const Settings = () => {
@@ -33,7 +32,7 @@ export const Settings = () => {
     confirmPassword: "",
   };
   const onSubmit = (values: any) => {
-    if (!checkValuesChanged(values, initialValues)) {
+    if (!formik.dirty) {
       navigate(`/profiles/@${values.username}`);
       return;
     }
