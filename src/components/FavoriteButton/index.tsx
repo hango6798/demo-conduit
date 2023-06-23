@@ -8,6 +8,7 @@ import "./style.scss";
 import { useEffect, useMemo, useState } from "react";
 import articlesApi from "api/articlesApi";
 import { setCurrentArticle, setCurrentFavSlug } from "store/articlesSlice";
+import formatFavCount from "utils/formatFavCount";
 
 interface Props {
   article: Article;
@@ -90,7 +91,7 @@ export const FavoriteButton = ({
       className={className || ""}
     >
       <FontAwesomeIcon icon={faHeart} className="small me-2" />
-      {favoritesCount}
+      {formatFavCount(favoritesCount)}
     </Button>
   );
 };

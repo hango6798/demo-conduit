@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import axios from "axios";
 import { updateUser } from "store/userSlice";
 import { useNavigate } from "react-router-dom";
@@ -33,10 +33,6 @@ export const Settings = () => {
     confirmPassword: "",
   };
   const onSubmit = (values: any) => {
-    if (!checkValuesChanged(values, initialValues)) {
-      navigate(`/profiles/@${values.username}`);
-      return;
-    }
     dispatch(updateUser(values)).then((res) => {
       res.meta.requestStatus === "rejected"
         ? alert("Try again!")
@@ -70,11 +66,11 @@ export const Settings = () => {
     validationSchema,
   });
 
-  useEffect(() => {
-    formik.setValues(initialValues);
+  const formikDirty: boolean = useMemo(() => {
+    if (!user) return false;
+    return checkValuesChanged(formik.values, initialValues);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
+  }, [formik.values]);
   const errors = formik.errors;
   const touched = formik.touched;
 
@@ -231,7 +227,7 @@ export const Settings = () => {
           className="mx-auto d-block"
           size="lg"
           type="submit"
-          disabled={disabled}
+          disabled={disabled || !formikDirty}
         >
           Update Settings
         </Button>

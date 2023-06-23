@@ -33,6 +33,12 @@ export const ArticleDetail = () => {
   const createdTime = useMemo(() => {
     return formatTime(currentArticle.createdAt);
   }, [currentArticle.createdAt]);
+  const updatedTime = useMemo(() => {
+    if (currentArticle.updatedAt === currentArticle.createdAt) {
+      return null;
+    }
+    return formatTime(currentArticle.updatedAt);
+  }, [currentArticle.createdAt, currentArticle.updatedAt]);
 
   const author = currentArticle.author;
   const isUserPost = !!user && user.username === author.username;
@@ -69,40 +75,50 @@ export const ArticleDetail = () => {
       <Heading background="dark" color="white">
         <div className="text-start">
           <div className="h2 mb-4">{currentArticle.title}</div>
-          <div className="d-flex align-items-center flex-wrap">
-            <div className="d-flex align-items-center me-3 mb-2">
-              <Author
-                author={author}
-                createdTime={createdTime}
-                variant="dark"
-              />
-            </div>
-            {isUserPost ? (
-              <div className="d-flex align-items-center">
-                <Link
-                  className="btn btn-outline-light me-2 fw-bold small"
-                  to={`/editor/${slug}`}
-                >
-                  <FontAwesomeIcon icon={faEdit} className="me-2" />
-                  Edit article
-                </Link>
-                <Button
-                  variant="outline-danger"
-                  onClick={() => setShowConfirmDelete(true)}
-                >
-                  <FontAwesomeIcon icon={faTrash} className="me-2" />
-                  Delete article
-                </Button>
-              </div>
-            ) : (
-              <div className="d-flex align-items-center">
-                <FollowButton
-                  following={author.following}
-                  username={author.username}
-                  size="sm"
-                  className="me-2"
+          <div className="d-flex align-items-end justify-content-between flex-wrap">
+            <div className="d-flex align-items-center flex-wrap">
+              {/* author */}
+              <div className="d-flex align-items-center me-3 mb-2 mb-sm-0">
+                <Author
+                  author={author}
+                  createdTime={createdTime}
+                  variant="dark"
                 />
-                <FavoriteButton article={currentArticle} size="sm" />
+              </div>
+              {/* Buttons */}
+              {isUserPost ? (
+                <div className="d-flex align-items-center">
+                  <Link
+                    className="btn btn-outline-light me-2 fw-bold small"
+                    to={`/editor/${slug}`}
+                  >
+                    <FontAwesomeIcon icon={faEdit} className="me-2" />
+                    Edit article
+                  </Link>
+                  <Button
+                    variant="outline-danger"
+                    onClick={() => setShowConfirmDelete(true)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} className="me-2" />
+                    Delete article
+                  </Button>
+                </div>
+              ) : (
+                <div className="d-flex align-items-center">
+                  <FollowButton
+                    following={author.following}
+                    username={author.username}
+                    size="sm"
+                    className="me-2"
+                  />
+                  <FavoriteButton article={currentArticle} size="sm" />
+                </div>
+              )}
+            </div>
+            {/* updated time */}
+            {updatedTime && (
+              <div className="opacity-50 small mt-2 mt-sm-0">
+                Updated: {updatedTime}
               </div>
             )}
           </div>
@@ -110,9 +126,13 @@ export const ArticleDetail = () => {
       </Heading>
       <ContentWrapper>
         {/* Article Body */}
-        <div className="my-4">
-          <div>{currentArticle.body}</div>
-        </div>
+        <div
+          className="my-4"
+          dangerouslySetInnerHTML={{
+            __html: currentArticle.body.replaceAll("\\n", "<br/>"),
+          }}
+        ></div>
+        {/* Tag list */}
         <ul className="tags d-flex flex-wrap">
           {currentArticle.tagList &&
             currentArticle.tagList.map((tag: string, index: number) => {

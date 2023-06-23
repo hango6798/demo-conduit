@@ -142,7 +142,7 @@ export const Articles = () => {
         width: "100%",
       }}
     >
-      <Sider breakpoint="lg" collapsedWidth="0" theme="light">
+      <Sider breakpoint="md" collapsedWidth="0" theme="light">
         <div className="demo-logo-vertical" />
         <Menu
           theme="light"

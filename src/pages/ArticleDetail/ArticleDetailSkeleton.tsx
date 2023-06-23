@@ -2,7 +2,6 @@ import Skeleton from "react-loading-skeleton";
 import "./style.scss";
 import { ContentWrapper } from "components/Layout/ContentWrapper";
 import { Heading } from "components/Layout/Heading";
-import { AuthorSkeleton } from "components/Author/AuthorSkeleton";
 
 export const ArticleDetailSkeleton = () => {
   return (
@@ -13,12 +12,8 @@ export const ArticleDetailSkeleton = () => {
             <Skeleton count={2} />
           </div>
           <div className="d-flex align-items-center flex-wrap">
-            <div className="me-3 mb-2">
-              <AuthorSkeleton />
-            </div>
-            <div className="d-flex">
-              <Skeleton width={80} height={30} className="me-2" />
-              <Skeleton width={80} height={30} />
+            <div className="me-3 mb-2" style={{ width: "40%" }}>
+              <Skeleton height={45} />
             </div>
           </div>
         </div>
@@ -29,12 +24,8 @@ export const ArticleDetailSkeleton = () => {
         </div>
         <hr className="my-4" />
         <div className="d-flex align-items-center flex-wrap justify-content-center">
-          <div className="me-3 mb-2">
-            <AuthorSkeleton />
-          </div>
-          <div className="d-flex">
-            <Skeleton width={80} height={30} className="me-2" />
-            <Skeleton width={80} height={30} />
+          <div className="me-3 mb-2" style={{ width: "40%" }}>
+            <Skeleton height={45} />
           </div>
         </div>
       </ContentWrapper>

@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { ContentWrapper } from "components/Layout/ContentWrapper";
 import "./style.scss";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { fetchTags } from "store/tagsSlice";
 import {
@@ -56,13 +56,11 @@ export const Editor = () => {
 
   const onSubmit = (values: NewArticle) => {
     if (slug) {
-      !checkValuesChanged(values, currentArticle)
-        ? navigate(`/article/${slug}`)
-        : dispatch(updateArticle({ slug, article: values })).then((res) => {
-            res.meta.requestStatus === "rejected"
-              ? alert("Try again!")
-              : navigate(`/article/${res.payload.slug}`);
-          });
+      dispatch(updateArticle({ slug, article: values })).then((res) => {
+        res.meta.requestStatus === "rejected"
+          ? alert("Try again!")
+          : navigate(`/article/${res.payload.slug}`);
+      });
     } else {
       dispatch(createArticle(values)).then((res) => {
         res.meta.requestStatus === "rejected"
@@ -83,6 +81,10 @@ export const Editor = () => {
     onSubmit,
     validationSchema,
   });
+
+  const formikDirty = useMemo(() => {
+    return checkValuesChanged(formik.values, currentArticle);
+  }, [currentArticle, formik.values]);
 
   const touched = formik.touched;
   const errors = formik.errors;
@@ -200,7 +202,7 @@ export const Editor = () => {
           className="mx-auto d-block"
           size="lg"
           type="submit"
-          disabled={disabled}
+          disabled={disabled || !formikDirty}
         >
           Publish Article
         </Button>
