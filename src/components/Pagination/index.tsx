@@ -28,7 +28,9 @@ export const Pagination = ({
         </PagiBootstrap.Item>
       )}
       {currentPage > 4 && (
-        <PagiBootstrap.Ellipsis onClick={() => setCurrentPage(3)} />
+        <PagiBootstrap.Ellipsis
+          onClick={() => setCurrentPage(currentPage - 3)}
+        />
       )}
       {currentPage > 2 && (
         <PagiBootstrap.Item onClick={() => setCurrentPage(currentPage - 2)}>
@@ -53,7 +55,7 @@ export const Pagination = ({
       )}
       {currentPage < pagesCount - 3 && (
         <PagiBootstrap.Ellipsis
-          onClick={() => setCurrentPage(pagesCount - 3)}
+          onClick={() => setCurrentPage(currentPage + 3)}
         />
       )}
       {currentPage < pagesCount && (
