@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { ContentWrapper } from "components/Layout/ContentWrapper";
 import "./style.scss";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { fetchTags } from "store/tagsSlice";
 import {
@@ -17,6 +17,7 @@ import { Select, Space } from "antd";
 import type { SelectProps } from "antd";
 import checkValuesChanged from "utils/checkValuesChanged";
 import uppercaseFirstChar from "utils/uppercaseFirstChar";
+import JoditEditor from "jodit-react";
 
 export const Editor = () => {
   const { slug } = useParams();
@@ -31,6 +32,15 @@ export const Editor = () => {
 
   const defaultTags =
     currentArticle.slug === slug ? currentArticle.tagList : [];
+
+  // Jodit
+  const editor = useRef(null);
+  const [joditContent, setJoditContent] = useState("");
+
+  const config = {
+    readonly: false,
+    placeholder: "Write your article...",
+  };
 
   // Effects
   useEffect(() => {
@@ -101,11 +111,15 @@ export const Editor = () => {
     if (slug) {
       if (currentArticle.slug === slug) {
         setValuesFormik(currentArticle);
+        setJoditContent(currentArticle.body);
       } else {
         dispatch(getCurrentArticle(slug)).then((res) => {
-          res.meta.requestStatus === "rejected"
-            ? navigate("/editor")
-            : setValuesFormik(res.payload);
+          if (res.meta.requestStatus === "rejected") {
+            navigate("/editor");
+          } else {
+            setValuesFormik(res.payload);
+            setJoditContent(currentArticle.body);
+          }
         });
       }
     }
@@ -117,6 +131,11 @@ export const Editor = () => {
 
   const handleTagChange = (value: string[]) => {
     formik.setFieldValue("tagList", value);
+  };
+
+  const onBlurJodit = (newContent: string) => {
+    formik.setFieldValue("body", newContent);
+    setJoditContent(newContent);
   };
 
   return (
@@ -161,13 +180,19 @@ export const Editor = () => {
           <Form.Label>
             Body <span className="text-danger">*</span>
           </Form.Label>
-          <Form.Control
+          {/* <Form.Control
             as="textarea"
             rows={8}
             placeholder="Write your article (in markdown)"
             {...formik.getFieldProps("body")}
             isInvalid={touched.body && !!errors.body}
             disabled={disabled}
+          /> */}
+          <JoditEditor
+            ref={editor}
+            value={joditContent}
+            config={config}
+            onBlur={onBlurJodit}
           />
           <Form.Control.Feedback type="invalid">
             {errors.body && uppercaseFirstChar(errors.body)}

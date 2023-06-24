@@ -1,6 +1,6 @@
 import { configureStore, ThunkAction, Action, combineReducers} from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage'
-import { persistStore, persistReducer, PERSIST, PURGE, REHYDRATE } from 'redux-persist'
+import { persistStore, persistReducer } from 'redux-persist'
 import userReducer from './userSlice'
 import articlesReducer from './articlesSlice'
 import tagsReducer from './tagsSlice'
@@ -14,15 +14,7 @@ const persistConfig = {
   whitelist: []
 }
 const stateSyncConfig = {
-  predicate: (action:any) => {
-    const blacklist = [PERSIST, PURGE, REHYDRATE];
-    if (typeof action !== "function") {
-      if (Array.isArray(blacklist)) {
-        return blacklist.indexOf(action.type) < 0;
-      }
-    }
-    return false;
-  },
+  whitelist: ["user/login/fulfilled", "user/logout", "user/fetchUser/fulfilled", "user/updateUser/fulfilled"]
 }
 const stateSyncMiddleware = [createStateSyncMiddleware(stateSyncConfig)]
 const persistedReducer = persistReducer(persistConfig, combineReducers({
