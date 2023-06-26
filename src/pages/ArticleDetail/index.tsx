@@ -17,12 +17,13 @@ import { FollowButton } from "components/FollowButton";
 import { ConfirmDelete } from "components/Popup/ConfirmDelete";
 import { getComments } from "store/commentsSlice";
 import formatTime from "utils/formatTime";
+import showdown from "showdown";
 
 export const ArticleDetail = () => {
   const navigate = useNavigate();
   const { slug } = useParams();
   const dispatch = useAppDispatch();
-
+  const converter = new showdown.Converter();
   // get global state from store
   const { comments } = useAppSelector((store) => store.commentsReducer);
   const { user } = useAppSelector((store) => store.userReducer);
@@ -33,6 +34,7 @@ export const ArticleDetail = () => {
   const createdTime = useMemo(() => {
     return formatTime(currentArticle.createdAt);
   }, [currentArticle.createdAt]);
+
   const updatedTime = useMemo(() => {
     if (currentArticle.updatedAt === currentArticle.createdAt) {
       return null;
@@ -129,7 +131,7 @@ export const ArticleDetail = () => {
         <div
           className="my-4"
           dangerouslySetInnerHTML={{
-            __html: currentArticle.body.replaceAll("\\n", "<br/>"),
+            __html: converter.makeHtml(currentArticle.body),
           }}
         ></div>
         {/* Tag list */}

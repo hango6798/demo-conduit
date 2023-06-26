@@ -61,11 +61,13 @@ const Header = () => {
             {userLoading ? (
               <NavDropdown
                 title={
-                  <span className="text-secondary">
-                    <img
-                      src="https://api.realworld.io/images/smiley-cyrus.jpeg"
-                      alt=""
-                    />
+                  <span className="user-info text-secondary">
+                    <span className="avatar">
+                      <img
+                        src="https://api.realworld.io/images/smiley-cyrus.jpeg"
+                        alt=""
+                      />
+                    </span>
                     User name
                   </span>
                 }
@@ -76,8 +78,10 @@ const Header = () => {
             ) : user ? (
               <NavDropdown
                 title={
-                  <span className="text-secondary">
-                    <img src={user.image} alt="" />
+                  <span className="user-info text-secondary">
+                    <span className="avatar">
+                      <img src={user.image} alt="" />
+                    </span>
                     {userName}
                   </span>
                 }

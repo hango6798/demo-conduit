@@ -33,6 +33,11 @@
     }
 }
 .ant-select{
+    &:hover{
+        .ant-select-selector{
+            border-color: var(--bs-border-color)!important;
+        }
+    }
     .ant-select-selector{
         padding: 0.375rem 0.75rem;
         font-size: 1rem;
