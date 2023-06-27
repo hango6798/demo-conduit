@@ -27,7 +27,7 @@ export const Settings = () => {
   const initialValues = {
     image: user?.image,
     username: user?.username,
-    bio: user?.bio,
+    bio: user?.bio || "",
     email: user?.email,
     newPassword: "",
     confirmPassword: "",

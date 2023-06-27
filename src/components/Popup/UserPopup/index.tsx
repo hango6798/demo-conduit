@@ -14,6 +14,7 @@ import {
 } from "store/userSlice";
 import React, { useEffect } from "react";
 import resetData from "utils/resetData";
+import uppercaseFirstChar from "utils/uppercaseFirstChar";
 
 export const UserPopup = () => {
   const dispatch = useAppDispatch();
@@ -159,7 +160,8 @@ export const UserPopup = () => {
                 disabled={disabled}
               />
               <Form.Control.Feedback type="invalid">
-                {registerErrors.username}
+                {registerErrors.username &&
+                  uppercaseFirstChar(registerErrors.username)}
               </Form.Control.Feedback>
             </Form.Group>
             {/* Email */}
@@ -173,7 +175,8 @@ export const UserPopup = () => {
                 disabled={disabled}
               />
               <Form.Control.Feedback type="invalid">
-                {registerErrors.email}
+                {registerErrors.email &&
+                  uppercaseFirstChar(registerErrors.email)}
               </Form.Control.Feedback>
             </Form.Group>
             {/* Password */}
@@ -191,7 +194,8 @@ export const UserPopup = () => {
               />
 
               <Form.Control.Feedback type="invalid">
-                {registerErrors.password}
+                {registerErrors.password &&
+                  uppercaseFirstChar(registerErrors.password)}
               </Form.Control.Feedback>
             </Form.Group>
             {/* Confirm Password */}
@@ -210,7 +214,8 @@ export const UserPopup = () => {
               />
 
               <Form.Control.Feedback type="invalid">
-                {registerErrors.confirmPassword}
+                {registerErrors.confirmPassword &&
+                  uppercaseFirstChar(registerErrors.confirmPassword)}
               </Form.Control.Feedback>
             </Form.Group>
           </Modal.Body>
@@ -241,7 +246,7 @@ export const UserPopup = () => {
                 disabled={disabled}
               />
               <Form.Control.Feedback type="invalid">
-                {loginErrors.email}
+                {loginErrors.email && uppercaseFirstChar(loginErrors.email)}
               </Form.Control.Feedback>
             </Form.Group>
             {/* Password */}
@@ -257,7 +262,8 @@ export const UserPopup = () => {
               />
 
               <Form.Control.Feedback type="invalid">
-                {loginErrors.password}
+                {loginErrors.password &&
+                  uppercaseFirstChar(loginErrors.password)}
               </Form.Control.Feedback>
             </Form.Group>
           </Modal.Body>
