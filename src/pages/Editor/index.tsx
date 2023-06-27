@@ -179,7 +179,7 @@ export const Editor = () => {
           />
           {errors.body && (
             <div className="invalid-feedback d-block">
-              {uppercaseFirstChar(errors.body)}
+              {touched.body && uppercaseFirstChar(errors.body)}
             </div>
           )}
         </Form.Group>

@@ -14,6 +14,7 @@ import { ListArticle } from "components/ListArticle";
 import { ParamsArticle, Tab } from "models";
 import { fetchGlobalArticles } from "store/articlesSlice";
 import { Pagination } from "components/Pagination";
+import "./style.scss";
 
 export const Profile = () => {
   const dispatch = useAppDispatch();
@@ -125,14 +126,13 @@ export const Profile = () => {
         )}
         {profileStatus.getProfile === "idle" && currentProfile.username && (
           <>
-            <Image
-              src={currentProfile.image}
-              alt=""
-              rounded
-              className="border border-white border-3 mb-2"
-              width={100}
-              height={100}
-            />
+            <div className="profile-avatar border border-white border-3 mb-2 rounded mx-auto">
+              <Image
+                src={currentProfile.image}
+                alt={currentProfile.username}
+                rounded
+              />
+            </div>
             <p className="h3 m-0 mb-2">{currentProfile.username}</p>
             {isUserProfile ? (
               <Link className="btn btn-outline-light fw-medium" to="/settings">
