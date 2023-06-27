@@ -1,4 +1,5 @@
 {
+  "homepage": "https://hango6798.github.io/demo-conduit",
   "name": "real-world-v2",
   "version": "0.1.0",
   "private": true,
@@ -21,6 +22,7 @@
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
     "formik": "^2.4.1",
+    "gh-pages": "^5.0.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
@@ -40,6 +42,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
