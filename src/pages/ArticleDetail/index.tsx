@@ -36,10 +36,9 @@ export const ArticleDetail = () => {
   }, [currentArticle.createdAt]);
 
   const updatedTime = useMemo(() => {
-    if (currentArticle.updatedAt === currentArticle.createdAt) {
-      return null;
-    }
-    return formatTime(currentArticle.updatedAt);
+    return currentArticle.updatedAt === currentArticle.createdAt
+      ? null
+      : formatTime(currentArticle.updatedAt);
   }, [currentArticle.createdAt, currentArticle.updatedAt]);
 
   const author = currentArticle.author;

@@ -69,17 +69,18 @@ export const Articles = () => {
   const [currentTab, setCurrentTab] = useState<Tab | undefined>(undefined);
 
   useEffect(() => {
-    if (user) {
-      if (currentFavSlug) {
-        navigate(`/article/${currentFavSlug}`);
-        dispatch(setCurrentFavSlug(null));
-      } else {
-        setCurrentTab(Tab.FEED);
-      }
-    } else {
-      setCurrentTab(Tab.GLOBAL);
-    }
     dispatch(setCurrentTag(null));
+    if (!user) {
+      setCurrentTab(Tab.GLOBAL);
+      return;
+    }
+
+    if (currentFavSlug) {
+      navigate(`/article/${currentFavSlug}`);
+      dispatch(setCurrentFavSlug(null));
+    } else {
+      setCurrentTab(Tab.FEED);
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -114,6 +115,7 @@ export const Articles = () => {
       limit,
       offset: (currentPage - 1) * limit,
     };
+
     if (currentTag) {
       dispatch(
         fetchGlobalArticles({
@@ -121,7 +123,10 @@ export const Articles = () => {
           tag: currentTag,
         })
       );
-    } else if (currentTab === Tab.GLOBAL) {
+      return;
+    }
+
+    if (currentTab === Tab.GLOBAL) {
       dispatch(fetchGlobalArticles(params));
     } else if (user && currentTab === Tab.FEED) {
       dispatch(fetchFeedArticles(params));

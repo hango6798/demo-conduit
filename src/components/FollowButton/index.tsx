@@ -47,9 +47,9 @@ export const FollowButton = ({
     }
     setLoading(true);
     setFollow(!follow);
-    const api = follow ? profilesApi.unfollow : profilesApi.follow;
+    const followApi = follow ? profilesApi.unfollow : profilesApi.follow;
 
-    api(username)
+    followApi(username)
       .then((r) => {
         setFollow(r.data.profile.following);
         dispatch(

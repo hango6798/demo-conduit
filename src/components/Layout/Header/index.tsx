@@ -25,12 +25,10 @@ const Header = () => {
   const userLoading = status.getUser === "loading";
 
   const userName: string = useMemo(() => {
-    if (user) {
-      return user.username.length > 10
-        ? user.username.substring(0, 10) + "..."
-        : user.username;
-    }
-    return "";
+    if (!user) return "";
+    return user.username.length > 10
+      ? user.username.substring(0, 10) + "..."
+      : user.username;
   }, [user]);
 
   const showPopup = (name: Popup) => {

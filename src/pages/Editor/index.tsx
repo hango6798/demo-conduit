@@ -29,13 +29,17 @@ export const Editor = () => {
   const { currentArticle, status } = useAppSelector(
     (store) => store.articlesReducer
   );
+  const converter = new showdown.Converter();
 
-  const disabled = status.currentArticle === "loading";
+  const disabled = useMemo(() => {
+    return status.currentArticle === "loading";
+  }, [status.currentArticle]);
 
-  const defaultTags =
-    currentArticle.slug === slug ? currentArticle.tagList : [];
+  const defaultTags = useMemo(() => {
+    return currentArticle.slug === slug ? currentArticle.tagList : [];
+  }, [currentArticle.slug, currentArticle.tagList, slug]);
 
-  // Effects
+  // fetch Tags
   useEffect(() => {
     !tags.length && dispatch(fetchTags());
   }, [dispatch, tags]);
@@ -58,19 +62,17 @@ export const Editor = () => {
   };
 
   const onSubmit = (values: NewArticle) => {
-    if (slug) {
-      dispatch(updateArticle({ slug, article: values })).then((res) => {
-        res.meta.requestStatus === "rejected"
-          ? alert("Try again!")
-          : navigate(`/article/${res.payload.slug}`);
-      });
-    } else {
-      dispatch(createArticle(values)).then((res) => {
-        res.meta.requestStatus === "rejected"
-          ? alert("Try again!")
-          : navigate(`/article/${res.payload.slug}`);
-      });
-    }
+    slug
+      ? dispatch(updateArticle({ slug, article: values })).then((res) => {
+          res.meta.requestStatus === "rejected"
+            ? alert("Try again!")
+            : navigate(`/article/${res.payload.slug}`);
+        })
+      : dispatch(createArticle(values)).then((res) => {
+          res.meta.requestStatus === "rejected"
+            ? alert("Try again!")
+            : navigate(`/article/${res.payload.slug}`);
+        });
   };
 
   const validationSchema = Yup.object({
@@ -101,19 +103,15 @@ export const Editor = () => {
         tagList: data.tagList,
       });
     };
-    if (slug) {
-      if (currentArticle.slug === slug) {
-        setValuesFormik(currentArticle);
-      } else {
-        dispatch(getCurrentArticle(slug)).then((res) => {
-          if (res.meta.requestStatus === "rejected") {
-            navigate("/editor");
-          } else {
-            setValuesFormik(res.payload);
-          }
+
+    if (!slug) return;
+    currentArticle.slug === slug
+      ? setValuesFormik(currentArticle)
+      : dispatch(getCurrentArticle(slug)).then((res) => {
+          res.meta.requestStatus === "rejected"
+            ? navigate("/editor")
+            : setValuesFormik(res.payload);
         });
-      }
-    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
@@ -125,13 +123,8 @@ export const Editor = () => {
   };
 
   const handleEditorChange = ({ html, text }: any) => {
-    if (text.trim() === "") {
-      formik.setFieldError("body", "Body is a required field!");
-      return;
-    }
     formik.setFieldValue("body", text);
   };
-  const converter = new showdown.Converter();
 
   return (
     <ContentWrapper>
@@ -185,7 +178,9 @@ export const Editor = () => {
             className={`${errors.body ? "border-danger" : null} rounded`}
           />
           {errors.body && (
-            <div className="invalid-feedback d-block">{errors.body}</div>
+            <div className="invalid-feedback d-block">
+              {uppercaseFirstChar(errors.body)}
+            </div>
           )}
         </Form.Group>
 

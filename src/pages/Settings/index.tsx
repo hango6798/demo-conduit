@@ -39,6 +39,7 @@ export const Settings = () => {
         : navigate(`/profiles/@${values.username}`);
     });
   };
+
   const validate = (values: any) => {
     const errors: any = {};
     if (values.newPassword !== "" && values.confirmPassword === "") {
@@ -46,6 +47,7 @@ export const Settings = () => {
     }
     return errors;
   };
+
   const validationSchema = Yup.object({
     image: Yup.string().required(),
     username: Yup.string().required().trim(),
@@ -67,14 +69,13 @@ export const Settings = () => {
   });
 
   const formikDirty: boolean = useMemo(() => {
-    if (!user) return false;
     return checkValuesChanged(formik.values, initialValues);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values]);
   const errors = formik.errors;
   const touched = formik.touched;
 
-  // Events
+  // Change avatar
   function handleChangeAvatar(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     const payload = new FormData();

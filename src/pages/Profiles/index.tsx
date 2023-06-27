@@ -11,22 +11,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import { Tabs } from "antd";
 import { ListArticle } from "components/ListArticle";
-import { ParamsArticle } from "models";
+import { ParamsArticle, Tab } from "models";
 import { fetchGlobalArticles } from "store/articlesSlice";
 import { Pagination } from "components/Pagination";
-
-enum TabName {
-  MY_ARTICLES = "myArticles",
-  FAVORITED_ARTICLES = "favoritedArticles",
-}
 
 export const Profile = () => {
   const dispatch = useAppDispatch();
   const params = useParams();
   const { user } = useAppSelector((store) => store.userReducer);
-  const { articles } = useAppSelector(
-    (store) => store.articlesReducer
-  );
+  const { articles } = useAppSelector((store) => store.articlesReducer);
   const { profile, status: profileStatus } = useAppSelector(
     (store) => store.profilesReducer
   );
@@ -52,18 +45,18 @@ export const Profile = () => {
 
   const listTabs = [
     {
-      name: TabName.MY_ARTICLES,
+      name: Tab.MY_ARTICLES,
       label: "My Articles",
     },
     {
-      name: TabName.FAVORITED_ARTICLES,
+      name: Tab.FAVORITED,
       label: "Favorited Articles",
     },
   ];
 
   const limit = 5;
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [currentTab, setCurrentTab] = useState<string>(TabName.MY_ARTICLES);
+  const [currentTab, setCurrentTab] = useState<string>(Tab.MY_ARTICLES);
 
   const pagesCount: number = useMemo(() => {
     return articles?.articlesCount
@@ -96,13 +89,13 @@ export const Profile = () => {
   const onChange = (key: string) => {
     setCurrentTab(key);
     currentPage !== 1 && setCurrentPage(1);
-    key === TabName.MY_ARTICLES ? getMyArticles() : getFavoritedArticles();
+    key === Tab.MY_ARTICLES ? getMyArticles() : getFavoritedArticles();
   };
 
   useEffect(() => {
     if (usernameParam) {
       currentPage !== 1 && setCurrentPage(1);
-      currentTab !== TabName.MY_ARTICLES && setCurrentTab(TabName.MY_ARTICLES);
+      currentTab !== Tab.MY_ARTICLES && setCurrentTab(Tab.MY_ARTICLES);
       getMyArticles();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,9 +103,7 @@ export const Profile = () => {
 
   useEffect(() => {
     if (currentPage === 1) return;
-    currentTab === TabName.MY_ARTICLES
-      ? getMyArticles()
-      : getFavoritedArticles();
+    currentTab === Tab.MY_ARTICLES ? getMyArticles() : getFavoritedArticles();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
@@ -171,7 +162,7 @@ export const Profile = () => {
           className="mt-3"
           onChange={onChange}
           type="card"
-          items={listTabs.map((tab: { label: string; name: TabName }) => {
+          items={listTabs.map((tab: { label: string; name: Tab }) => {
             return {
               label: tab.label,
               key: tab.name,

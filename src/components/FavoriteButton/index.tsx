@@ -59,8 +59,11 @@ export const FavoriteButton = ({
     setFavorited(!favorited);
     setFavoritesCount(favorited ? favoritesCount - 1 : favoritesCount + 1);
 
-    const api = favorited ? articlesApi.unfavorite : articlesApi.favorite;
-    api(article.slug)
+    const favoriteApi = favorited
+      ? articlesApi.unfavorite
+      : articlesApi.favorite;
+
+    favoriteApi(article.slug)
       .then((r) => {
         setFavorited(r.data.article.favorited);
         setFavoritesCount(r.data.article.favoritesCount);

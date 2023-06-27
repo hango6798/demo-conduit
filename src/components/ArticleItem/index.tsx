@@ -1,6 +1,6 @@
 import { ListGroup } from "react-bootstrap";
 import { Article } from "models";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./style.scss";
 import { FavoriteButton } from "components/FavoriteButton";
 import Author from "components/Author";
@@ -15,9 +15,15 @@ interface Props {
 }
 
 export const ArticleItem = ({ article }: Props) => {
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const { currentTag } = useAppSelector((store) => store.tagsReducer);
   const articleUrl = `/article/${article.slug}`;
+  const limit = 10;
+
+  const currentPage = useMemo(() => {
+    return location.pathname.split("/")[1];
+  }, [location]);
 
   const author = article.author;
   const createdTime = useMemo(() => {
@@ -25,16 +31,15 @@ export const ArticleItem = ({ article }: Props) => {
   }, [article.createdAt]);
 
   const handleTagClick = (tag: string) => {
-    if (tag !== currentTag) {
-      dispatch(setCurrentTag(tag));
-      dispatch(
-        fetchGlobalArticles({
-          limit: 10,
-          tag: tag,
-          offset: 0,
-        })
-      );
-    }
+    if (currentPage === "profiles" || tag === currentTag) return;
+    dispatch(setCurrentTag(tag));
+    dispatch(
+      fetchGlobalArticles({
+        limit,
+        tag,
+        offset: 0,
+      })
+    );
   };
 
   return (

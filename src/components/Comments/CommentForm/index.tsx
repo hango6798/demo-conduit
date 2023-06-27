@@ -19,32 +19,31 @@ const CommentForm = ({ slug, setCurrentPage }: Props) => {
   const { status } = useAppSelector((store) => store.commentsReducer);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  // state
   const [commentText, setCommentText] = useState<string>("");
-
   const postingComment = status.createComment === "loading";
 
   const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentText(e.target.value);
-    if (textareaRef.current) {
-      const textarea = textareaRef.current;
-      const top = textarea.scrollTop;
-      const height = textarea.offsetHeight;
-      if (e.target.value === "") {
-        textarea.style.height = 62 + "px";
-      } else if (top > 0) {
-        textarea.style.height = top + height + "px";
-      }
+    if (!textareaRef.current) return;
+
+    const textarea = textareaRef.current;
+    const top = textarea.scrollTop;
+    const height = textarea.offsetHeight;
+    if (e.target.value === "") {
+      textarea.style.height = 62 + "px";
+    }
+    if (e.target.value !== "" && top > 0) {
+      textarea.style.height = top + height + "px";
     }
   };
 
   const postComment = () => {
-    if (commentText.trim() !== "") {
-      dispatch(createComment({ slug, comment: commentText })).then(() => {
-        setCurrentPage(1);
-      });
-      setCommentText("");
-    }
+    if (commentText.trim() === "") return;
+
+    dispatch(createComment({ slug, comment: commentText })).then(() => {
+      setCurrentPage(1);
+    });
+    setCommentText("");
   };
 
   const handleEnterComment = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -55,7 +54,7 @@ const CommentForm = ({ slug, setCurrentPage }: Props) => {
     }
   };
 
-  const handleSignInClick = () => {
+  const handleSignIn = () => {
     dispatch(
       setShowPopup({
         name: Popup.LOGIN,
@@ -107,7 +106,7 @@ const CommentForm = ({ slug, setCurrentPage }: Props) => {
   } else
     return (
       <div className="text-center mb-4">
-        <Button variant="primary me-1" onClick={handleSignInClick}>
+        <Button variant="primary me-1" onClick={handleSignIn}>
           Sign In
         </Button>{" "}
         to add comments on this article.

@@ -33,14 +33,12 @@ const ListComments = ({ slug, currentPage, setCurrentPage }: Props) => {
   const commentRef = useRef<HTMLDivElement>(null);
 
   const sortedComment = useMemo(() => {
-    if (!!comments.length) {
-      return [...comments].sort((a: Comment, b: Comment) => {
-        const aTime = new Date(a.createdAt).getTime();
-        const bTime = new Date(b.createdAt).getTime();
-        return bTime - aTime;
-      });
-    }
-    return [];
+    if (!comments.length) return [];
+    return [...comments].sort((a: Comment, b: Comment) => {
+      const aTime = new Date(a.createdAt).getTime();
+      const bTime = new Date(b.createdAt).getTime();
+      return bTime - aTime;
+    });
   }, [comments]);
 
   // Comment Pagination
