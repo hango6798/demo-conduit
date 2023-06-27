@@ -149,7 +149,9 @@ export const Settings = () => {
 
         {/* Username */}
         <Form.Group className="mb-3">
-          <Form.Label>Username</Form.Label>
+          <Form.Label>
+            Username <span className="text-danger">*</span>
+          </Form.Label>
           <Form.Control
             type="text"
             placeholder="Username"
@@ -180,7 +182,9 @@ export const Settings = () => {
 
         {/* Email */}
         <Form.Group className="mb-3">
-          <Form.Label>Email</Form.Label>
+          <Form.Label>
+            Email <span className="text-danger">*</span>
+          </Form.Label>
           <Form.Control
             type="email"
             placeholder="Email"
