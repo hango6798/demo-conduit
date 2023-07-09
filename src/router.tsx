@@ -10,8 +10,8 @@ import { Settings } from "pages/Settings";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="demo-conduit" />
-  }
+    element: <Navigate to="demo-conduit" />,
+  },
   {
     path: "demo-conduit",
     element: <Layout />,
@@ -60,6 +60,6 @@ export const router = createBrowserRouter([
         path: "profiles/:username/favorites",
         element: <Profile />,
       },
-    ]
+    ],
   },
 ]);
