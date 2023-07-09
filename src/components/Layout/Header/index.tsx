@@ -86,17 +86,17 @@ const Header = () => {
                 id="collasible-nav-dropdown"
                 className="ms-auto"
               >
-                <Link className="dropdown-item" to="/editor">
+                <Link className="dropdown-item" to="/demo-conduit/editor">
                   <FontAwesomeIcon icon={faPenToSquare} className="me-2" />
                   New Article
                 </Link>
-                <Link className="dropdown-item" to="/settings">
+                <Link className="dropdown-item" to="/demo-conduit/settings">
                   <FontAwesomeIcon icon={faGear} className="me-2" />
                   Settings
                 </Link>
                 <Link
                   className="dropdown-item"
-                  to={`/profiles/@${user.username}`}
+                  to={`/demo-conduit/profiles/@${user.username}`}
                 >
                   <FontAwesomeIcon icon={faUser} className="me-2" />
                   Profile

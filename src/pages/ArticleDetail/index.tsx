@@ -50,8 +50,8 @@ export const ArticleDetail = () => {
   useEffect(() => {
     if (slug && (slug !== currentArticle.slug || !currentArticle.slug)) {
       dispatch(getCurrentArticle(slug));
-      dispatch(getComments(slug));
     }
+    slug && dispatch(getComments(slug));
   }, [dispatch, slug, currentArticle]);
 
   const handleDeleteArticle = () => {
@@ -91,7 +91,7 @@ export const ArticleDetail = () => {
                 <div className="d-flex align-items-center">
                   <Link
                     className="btn btn-outline-light me-2 fw-bold small"
-                    to={`/editor/${slug}`}
+                    to={`/demo-conduit/editor/${slug}`}
                   >
                     <FontAwesomeIcon icon={faEdit} className="me-2" />
                     Edit article
@@ -156,7 +156,7 @@ export const ArticleDetail = () => {
             <div className="d-flex align-items-center">
               <Link
                 className="btn btn-outline-secondary me-2 fw-bold small"
-                to={`/editor/${slug}`}
+                to={`/demo-conduit/editor/${slug}`}
               >
                 <FontAwesomeIcon icon={faEdit} className="me-2" />
                 Edit article

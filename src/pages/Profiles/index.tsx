@@ -135,7 +135,10 @@ export const Profile = () => {
             </div>
             <p className="h3 m-0 mb-2">{currentProfile.username}</p>
             {isUserProfile ? (
-              <Link className="btn btn-outline-light fw-medium" to="/settings">
+              <Link
+                className="btn btn-outline-light fw-medium"
+                to="/demo-conduit/settings"
+              >
                 <FontAwesomeIcon icon={faGear} className="me-2" />
                 Edit profile settings
               </Link>

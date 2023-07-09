@@ -71,7 +71,7 @@ const CommentForm = ({ slug, setCurrentPage }: Props) => {
       >
         {user.username && (
           <Link
-            to={`/profiles/@${user.username}`}
+            to={`/demo-conduit/profiles/@${user.username}`}
             className="avatar border border-light border-2 rounded"
           >
             <Image src={user.image} width={40} height={40} rounded />

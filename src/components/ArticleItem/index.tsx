@@ -18,7 +18,7 @@ export const ArticleItem = ({ article }: Props) => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { currentTag } = useAppSelector((store) => store.tagsReducer);
-  const articleUrl = `/article/${article.slug}`;
+  const articleUrl = `/demo-conduit/article/${article.slug}`;
   const limit = 10;
 
   const currentPage = useMemo(() => {

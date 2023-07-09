@@ -66,12 +66,12 @@ export const Editor = () => {
       ? dispatch(updateArticle({ slug, article: values })).then((res) => {
           res.meta.requestStatus === "rejected"
             ? alert("Try again!")
-            : navigate(`/article/${res.payload.slug}`);
+            : navigate(`/demo-conduit/article/${res.payload.slug}`);
         })
       : dispatch(createArticle(values)).then((res) => {
           res.meta.requestStatus === "rejected"
             ? alert("Try again!")
-            : navigate(`/article/${res.payload.slug}`);
+            : navigate(`/demo-conduit/article/${res.payload.slug}`);
         });
   };
 
@@ -109,7 +109,7 @@ export const Editor = () => {
       ? setValuesFormik(currentArticle)
       : dispatch(getCurrentArticle(slug)).then((res) => {
           res.meta.requestStatus === "rejected"
-            ? navigate("/editor")
+            ? navigate("/demo-conduit/editor")
             : setValuesFormik(res.payload);
         });
 

@@ -36,7 +36,7 @@ export const Settings = () => {
     dispatch(updateUser(values)).then((res) => {
       res.meta.requestStatus === "rejected"
         ? alert("Try again!")
-        : navigate(`/profiles/@${values.username}`);
+        : navigate(`/demo-conduit/profiles/@${values.username}`);
     });
   };
 

@@ -76,7 +76,7 @@ export const Articles = () => {
     }
 
     if (currentFavSlug) {
-      navigate(`/article/${currentFavSlug}`);
+      navigate(`/demo-conduit/article/${currentFavSlug}`);
       dispatch(setCurrentFavSlug(null));
     } else {
       setCurrentTab(Tab.FEED);

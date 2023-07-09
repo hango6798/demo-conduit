@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Author = ({ author, createdTime, variant }: Props) => {
-  const authorUrl = `/profiles/@${author.username}`;
+  const authorUrl = `/demo-conduit/profiles/@${author.username}`;
   const dark = variant === "dark";
 
   return (

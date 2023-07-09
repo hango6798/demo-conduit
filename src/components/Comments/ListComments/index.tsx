@@ -86,7 +86,7 @@ const ListComments = ({ slug, currentPage, setCurrentPage }: Props) => {
             className="mb-3 d-flex align-items-start comment-item"
           >
             <Link
-              to={`/profiles/@${comment.author.username}`}
+              to={`/demo-conduit/profiles/@${comment.author.username}`}
               className="avatar"
             >
               <Image
@@ -100,7 +100,7 @@ const ListComments = ({ slug, currentPage, setCurrentPage }: Props) => {
               <div className="d-flex justify-content-between align-items-center mb-1">
                 <div className="d-flex align-items-center flex-wrap">
                   <Link
-                    to={`/profiles/@${comment.author.username}`}
+                    to={`/demo-conduit/profiles/@${comment.author.username}`}
                     className="text-secondary fw-medium author-name me-2"
                   >
                     {comment.author.username}
