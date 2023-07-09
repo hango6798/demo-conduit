@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import { Layout } from "components/Layout";
 import { RequiredAuth } from "components/RequiredAuth";
 import { ArticleDetail } from "pages/ArticleDetail";
@@ -56,6 +56,10 @@ export const router = createBrowserRouter([
         path: "profiles/:username/favorites",
         element: <Profile />,
       },
-    ],
+    ]
   },
+  {
+    path: "demo-conduit",
+    element: <Navigate to="/" />
+  }
 ]);
