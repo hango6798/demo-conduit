@@ -9,7 +9,11 @@ import { Settings } from "pages/Settings";
 
 export const router = createBrowserRouter([
   {
-    path: "",
+    path: "/",
+    element: <Navigate to="demo-conduit" />
+  }
+  {
+    path: "demo-conduit",
     element: <Layout />,
     children: [
       {
@@ -58,8 +62,4 @@ export const router = createBrowserRouter([
       },
     ]
   },
-  {
-    path: "demo-conduit",
-    element: <Navigate to="/" />
-  }
 ]);
